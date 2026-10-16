@@ -34,7 +34,7 @@ section{padding:24px 0}
 .drop{border:2px dashed var(--bd);border-radius:12px;padding:28px;text-align:center;color:var(--mu);cursor:pointer}
 .drop.on{border-color:var(--ac)}
 .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
-input[type=text],select{padding:10px 12px;border-radius:8px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit;min-width:0;flex:1 1 160px}
+input[type=text],input[type=password],select{padding:10px 12px;border-radius:8px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit;min-width:0;flex:1 1 160px}
 button.p,a.p{background:var(--ac);color:var(--acx);border:0;border-radius:10px;padding:11px 20px;font:600 15px inherit;cursor:pointer;text-decoration:none;display:inline-block}
 button.p:disabled{opacity:.5;cursor:not-allowed}
 #files{margin:12px 0 0;padding:0;list-style:none;font-size:14px;color:var(--mu)}
@@ -57,9 +57,9 @@ footer{border-top:1px solid var(--bd);padding:24px 0;color:var(--mu);font-size:1
 
 <main class="wrap">
 <div class="hero">
-<span class="badge">🔒 Files never leave your device</span>
+<span class="badge">🔒 Private by design · server uploads are auto-deleted</span>
 <h1>Every PDF tool,<br>one simple place.</h1>
-<p>Convert, merge, split and rotate PDFs right in your browser. Fast, free, private.</p>
+<p>Merge, split, rotate and convert PDFs to and from Word, Excel, PowerPoint and images. Fast, free, private.</p>
 </div>
 
 <section id="tools">
@@ -93,23 +93,29 @@ footer{border-top:1px solid var(--bd);padding:24px 0;color:var(--mu);font-size:1
 </ol></div>
 </section>
 </main>
-<footer><div class="wrap">© PDFKit · Processing happens locally in your browser</div></footer>
+<footer><div class="wrap">© PDFKit · Browser tools run on your device; server tools delete files right after conversion</div></footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script>
+// >>> Set this to your deployed backend URL, e.g. "https://pdfkit-api-xxxx.a.run.app"
+const API="";
 const $=id=>document.getElementById(id);
 const T=[
 {id:'img',i:'🖼️',n:'Images to PDF',d:'Combine JPG and PNG images into one PDF.',m:1,acc:'image/jpeg,image/png'},
 {id:'merge',i:'🧩',n:'Merge PDF',d:'Join several PDFs into a single file.',m:1,acc:'application/pdf'},
 {id:'split',i:'✂️',n:'Extract pages',d:'Pull out pages or ranges, e.g. 1-3,5.',acc:'application/pdf',o:'<input type="text" id="rng" placeholder="Pages e.g. 1-3,5">'},
 {id:'rot',i:'🔄',n:'Rotate PDF',d:'Rotate all pages 90°, 180° or 270°.',acc:'application/pdf',o:'<select id="ang"><option>90</option><option>180</option><option>270</option></select>'},
-{n:'PDF to Word',i:'📝',d:'Editable DOCX output.'},{n:'Word to PDF',i:'📄',d:'DOC/DOCX to PDF.'},
-{n:'PDF to JPG',i:'📷',d:'Each page as an image.'},{n:'Excel to PDF',i:'📊',d:'Spreadsheets to PDF.'},
-{n:'PowerPoint to PDF',i:'📽️',d:'Slides to PDF.'},{n:'Compress PDF',i:'🗜️',d:'Reduce file size.'},
-{n:'Protect PDF',i:'🔐',d:'Add a password.'},{n:'OCR PDF',i:'🔍',d:'Make scans searchable.'}];
+{id:'p2w',srv:'pdf-to-word',i:'📝',n:'PDF to Word',d:'Editable DOCX output.',acc:'application/pdf'},
+{id:'w2p',srv:'word-to-pdf',i:'📄',n:'Word to PDF',d:'DOC/DOCX to PDF.',acc:'.doc,.docx,.odt,.rtf'},
+{id:'p2j',srv:'pdf-to-jpg',i:'📷',n:'PDF to JPG',d:'Each page as an image (ZIP).',acc:'application/pdf',o:'<select id="dpi"><option value="100">100 dpi</option><option value="150" selected>150 dpi</option><option value="200">200 dpi</option><option value="300">300 dpi</option></select>',x:()=>({dpi:$('dpi').value})},
+{id:'x2p',srv:'excel-to-pdf',i:'📊',n:'Excel to PDF',d:'Spreadsheets to PDF.',acc:'.xls,.xlsx,.ods,.csv'},
+{id:'s2p',srv:'powerpoint-to-pdf',i:'📽️',n:'PowerPoint to PDF',d:'Slides to PDF.',acc:'.ppt,.pptx,.odp'},
+{id:'cmp',srv:'compress',i:'🗜️',n:'Compress PDF',d:'Reduce file size.',acc:'application/pdf',o:'<select id="lvl"><option value="screen">Smallest file</option><option value="ebook" selected>Balanced</option><option value="printer">Best quality</option></select>',x:()=>({level:$('lvl').value})},
+{id:'prt',srv:'protect',i:'🔐',n:'Protect PDF',d:'Add a password (AES-256).',acc:'application/pdf',o:'<input type="password" id="pw" placeholder="Password (4-64 characters)" autocomplete="new-password">',x:()=>({password:$('pw').value})},
+{id:'ocr',srv:'ocr',i:'🔍',n:'OCR PDF',d:'Make scanned PDFs searchable.',acc:'application/pdf',o:'<select id="lng"><option value="eng">English</option><option value="hin">Hindi</option><option value="eng+hin">English + Hindi</option></select>',x:()=>({lang:$('lng').value})}];
 let cur=null,files=[];
-$('grid').innerHTML=T.map((t,k)=>`<button class="tool ${t.id?'live':'soon'}" data-k="${k}"><div class="ic">${t.i}</div><h3>${t.n}</h3><p>${t.d}</p><span class="tag">${t.id?'Available now':'Needs server'}</span></button>`).join('');
-$('grid').onclick=e=>{const b=e.target.closest('.tool');if(!b)return;const t=T[b.dataset.k];if(!t.id)return;open(t)};
+$('grid').innerHTML=T.map((t,k)=>`<button class="tool live" data-k="${k}"><div class="ic">${t.i}</div><h3>${t.n}</h3><p>${t.d}</p><span class="tag">${t.srv?'Secure server':'Runs in browser'}</span></button>`).join('');
+$('grid').onclick=e=>{const b=e.target.closest('.tool');if(!b)return;const t=T[b.dataset.k];open(t)};
 function open(t){cur=t;files=[];$('work').hidden=false;$('wt').textContent=t.n;$('wd').textContent=t.d;$('opts').innerHTML=t.o||'';$('inp').accept=t.acc;$('inp').multiple=!!t.m;$('files').innerHTML='';$('go').disabled=true;$('dl').hidden=true;$('msg').textContent='';$('work').scrollIntoView({behavior:'smooth'})}
 function setF(l){files=[...l];$('files').innerHTML=files.map(f=>`<li>📎 ${f.name} (${(f.size/1024).toFixed(0)} KB)</li>`).join('');$('go').disabled=!files.length;$('dl').hidden=true}
 $('drop').onclick=()=>$('inp').click();
@@ -120,6 +126,7 @@ $('drop').ondrop=e=>{e.preventDefault();$('drop').classList.remove('on');setF(e.
 const buf=f=>f.arrayBuffer();
 function parse(s,n){const o=new Set();s.split(',').forEach(p=>{const m=p.trim().split('-').map(Number);if(!m[0])return;const a=m[0],b=m[1]||a;for(let i=a;i<=Math.min(b,n);i++)o.add(i-1)});return[...o]}
 $('go').onclick=async()=>{
+if(cur.srv)return runServer();
 const {PDFDocument,degrees}=PDFLib;$('go').disabled=true;$('msg').textContent='Working…';
 try{let out;
 if(cur.id==='img'){out=await PDFDocument.create();for(const f of files){const b=await buf(f);const im=f.type==='image/png'?await out.embedPng(b):await out.embedJpg(b);out.addPage([im.width,im.height]).drawImage(im,{x:0,y:0,width:im.width,height:im.height})}}
@@ -131,6 +138,21 @@ $('dl').href=URL.createObjectURL(blob);$('dl').download=cur.id+'-result.pdf';$('
 }catch(e){$('msg').textContent='Error: '+e.message}
 $('go').disabled=false};
 
+function runServer(){
+if(!API){$('msg').textContent='Backend not configured: set the API constant at the top of the script.';return}
+if(cur.id==='prt'&&$('pw').value.length<4){$('msg').textContent='Enter a password of at least 4 characters.';return}
+$('go').disabled=true;$('dl').hidden=true;$('msg').textContent='Uploading…';
+const fd=new FormData();fd.append('file',files[0]);
+const x=cur.x?cur.x():{};for(const k in x)fd.append(k,x[k]);
+const r=new XMLHttpRequest();r.open('POST',API.replace(/\/$/,'')+'/api/'+cur.srv);r.responseType='blob';
+r.upload.onprogress=e=>{if(e.lengthComputable){const p=Math.round(e.loaded/e.total*100);$('msg').textContent=p<100?'Uploading… '+p+'%':'Converting… this can take a minute'}};
+r.onload=async()=>{
+if(r.status===200){const m=/filename="?([^";]+)"?/.exec(r.getResponseHeader('Content-Disposition')||'');
+$('dl').href=URL.createObjectURL(r.response);$('dl').download=m?m[1]:'result';$('dl').hidden=false;$('msg').textContent='Done ✓ ('+(r.response.size/1024).toFixed(0)+' KB)'}
+else{let d='Error '+r.status;try{d=JSON.parse(await r.response.text()).detail||d}catch(e){}$('msg').textContent='Error: '+d}
+$('go').disabled=false};
+r.onerror=()=>{$('msg').textContent='Could not reach the server. Check the API URL and ALLOWED_ORIGINS.';$('go').disabled=false};
+r.send(fd)}
 const D={
 'Netlify':[['Save the file','Name it <code>index.html</code> and put it in a folder, e.g. <code>pdfkit/</code>.'],['Open Netlify Drop','Go to app.netlify.com/drop and sign up (free).'],['Drag the folder','Drop the folder onto the page. Your site is live in seconds on a <code>.netlify.app</code> URL.'],['Custom domain','Site settings → Domain management → Add domain, then set the DNS records shown.'],['HTTPS','Enabled automatically with a free Let\'s Encrypt certificate.']],
 'GitHub Pages':[['Create a repo','On github.com create a public repo named <code>pdfkit</code>.'],['Upload files','Add <code>index.html</code> via “Add file → Upload files” or push with git:<pre>git init\ngit add .\ngit commit -m "init"\ngit remote add origin https://github.com/USER/pdfkit.git\ngit push -u origin main</pre>'],['Enable Pages','Settings → Pages → Source: “Deploy from a branch” → main / root → Save.'],['Visit your site','After about a minute: <code>https://USER.github.io/pdfkit</code>.'],['Custom domain','Add it under Pages → Custom domain and create a CNAME record at your DNS provider.']],

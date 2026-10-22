@@ -171,6 +171,7 @@ const names=Object.keys(D);
 function show(n){$('tabs').innerHTML=names.map(x=>`<button class="${x===n?'a':''}" data-n="${x}">${x}</button>`).join('');$('steps').innerHTML=D[n].map(s=>`<li><b>${s[0]}</b>${s[1]}</li>`).join('')}
 $('tabs').onclick=e=>{if(e.target.dataset.n)show(e.target.dataset.n)};
 show('Netlify');
-</script>
+</script>   <script src="pwa.js" defer></script>
+
 </body>
 </html>

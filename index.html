@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><link rel="manifest" href="manifest.webmanifest">
-   <meta name="theme-color" content="#d9480f">
-   <meta name="description" content="Merge, split, rotate, compress and convert PDFs. Free and private.">
-   <link rel="icon" type="image/png" href="icons/icon-96.png">
-   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-   <meta name="mobile-web-app-capable" content="yes">
-   <meta name="apple-mobile-web-app-capable" content="yes">
-   <meta name="apple-mobile-web-app-title" content="PDFKit">
-
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="description" content="Merge, split, rotate, compress and convert PDFs. Free and private.">
+<link rel="icon" type="image/png" href="icons/icon-96.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="theme-color" content="#d9480f">
 <title>PDFKit – Free PDF Converter Tools</title>
 <style>
 :root{--bg:#fafaf7;--card:#fff;--tx:#1c1b1a;--mu:#6b6862;--ac:#d9480f;--acx:#fff;--bd:#e6e3dc;--ok:#2b8a3e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -106,8 +103,7 @@ footer{border-top:1px solid var(--bd);padding:24px 0;color:var(--mu);font-size:1
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script>
 // >>> Set this to your deployed backend URL, e.g. "https://pdfkit-api-xxxx.a.run.app"
-const API="https://pdfkit-backend-gi27.onrender.com/;
-
+const API="https://pdfkit-backend-gi27.onrender.com";
 const $=id=>document.getElementById(id);
 const T=[
 {id:'img',i:'🖼️',n:'Images to PDF',d:'Combine JPG and PNG images into one PDF.',m:1,acc:'image/jpeg,image/png'},
@@ -171,7 +167,7 @@ const names=Object.keys(D);
 function show(n){$('tabs').innerHTML=names.map(x=>`<button class="${x===n?'a':''}" data-n="${x}">${x}</button>`).join('');$('steps').innerHTML=D[n].map(s=>`<li><b>${s[0]}</b>${s[1]}</li>`).join('')}
 $('tabs').onclick=e=>{if(e.target.dataset.n)show(e.target.dataset.n)};
 show('Netlify');
-</script>   <script src="pwa.js" defer></script>
-
+</script>
+<script src="pwa.js" defer></script>
 </body>
 </html>

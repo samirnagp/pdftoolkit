@@ -4,11 +4,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="description" content="Merge, split, rotate, compress and convert PDFs. Free and private.">
 <link rel="icon" type="image/png" href="icons/icon-96.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="theme-color" content="#d9480f">
-<title>PDFKit – Free PDF Converter Tools</title>
+<title>EasyPDF – Free Online PDF Tools: Merge, Convert, Compress, Unlock</title>
+<meta name="description" content="EasyPDF is a free online PDF toolkit. Merge, split, rotate, compress, protect and unlock PDFs, and convert PDF to Word, Word to PDF, Excel, PowerPoint and JPG. No sign-up.">
+<link rel="canonical" href="https://easypdf.co.in/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="EasyPDF">
+<meta property="og:title" content="EasyPDF – Free Online PDF Tools">
+<meta property="og:description" content="Merge, split, compress, protect, unlock and convert PDFs. Free, fast and private.">
+<meta property="og:url" content="https://easypdf.co.in/">
+<meta property="og:image" content="https://easypdf.co.in/icons/icon-512.png">
+<meta name="twitter:card" content="summary">
+<meta name="apple-mobile-web-app-title" content="EasyPDF">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "EasyPDF", "url": "https://easypdf.co.in/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "browserRequirements": "Requires a modern web browser", "description": "Free online PDF tools: merge, split, rotate, compress, protect, unlock and convert PDFs.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "INR"}, "featureList": ["Merge PDF", "Extract pages", "Rotate PDF", "Images to PDF", "PDF to Word", "Word to PDF", "PDF to JPG", "Excel to PDF", "PowerPoint to PDF", "Compress PDF", "Protect PDF", "Unlock PDF", "OCR PDF"]}</script>
 <style>
 :root{--bg:#fafaf7;--card:#fff;--tx:#1c1b1a;--mu:#6b6862;--ac:#d9480f;--acx:#fff;--bd:#e6e3dc;--ok:#2b8a3e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161514;--card:#201f1d;--tx:#f1efea;--mu:#a09b92;--ac:#ff8a4c;--acx:#161514;--bd:#34322e;--ok:#69db7c}}
@@ -55,10 +65,16 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace}
 .tabs button.a{background:var(--ac);color:var(--acx);border-color:var(--ac)}
 footer{border-top:1px solid var(--bd);padding:24px 0;color:var(--mu);font-size:14px;text-align:center;margin-top:30px}
 @media(max-width:560px){nav a:not(.keep){display:none}}
+.lead{color:var(--mu);margin:0 0 18px}
+.cards3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:10px}
+.card3{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px}.card3 h3{margin:0 0 6px}.card3 p{margin:0;color:var(--mu);font-size:15px}
+details{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px 16px;margin:0 0 10px}summary{cursor:pointer;font-weight:600}details p{color:var(--mu);margin:8px 0 0}
+footer a,details a{color:var(--ac)}
+[hidden]{display:none!important}
 </style>
 </head>
 <body>
-<header><div class="wrap"><nav><div class="logo">PDF<b>Kit</b></div><div><a href="#tools">Tools</a><a href="#deploy" class="keep">Deploy guide</a></div></nav></div></header>
+<header><div class="wrap"><nav><a class="logo" href="./" style="color:inherit;text-decoration:none">Easy<b>PDF</b></a><div><a href="#tools">Tools</a><a href="#about">About</a><a href="privacy.html" class="keep">Privacy</a></div></nav></div></header>
 
 <main class="wrap">
 <div class="hero">
@@ -82,28 +98,31 @@ footer{border-top:1px solid var(--bd);padding:24px 0;color:var(--mu);font-size:1
 </div>
 </section>
 
-<section id="deploy">
-<h2>Step-by-step deployment</h2>
-<p style="color:var(--mu)">This site is one static HTML file, so hosting is free and takes minutes.</p>
-<div class="tabs" id="tabs"></div>
-<ol class="steps" id="steps"></ol>
+<section id="about">
+<h2>Why EasyPDF</h2>
+<p class="lead">Simple PDF tools that respect your files.</p>
+<div class="cards3">
+<div class="card3"><h3>🔒 Private</h3><p>Merge, split, rotate and images-to-PDF run inside your browser, so those files never leave your device. Other tools upload a file only for the conversion and delete it right after.</p></div>
+<div class="card3"><h3>⚡ Free and quick</h3><p>No sign-up and no watermarks. Large or complex files can take a little longer to convert.</p></div>
+<div class="card3"><h3>🧰 Everything in one place</h3><p>Convert between PDF and Word, Excel, PowerPoint and JPG. Compress, protect, unlock and OCR your PDFs.</p></div>
+</div>
+</section>
 
-<div class="panel" style="margin-top:22px">
-<b>Adding server-side tools later (PDF → Word, Office → PDF, OCR)</b>
-<ol style="color:var(--mu);margin:8px 0 0;padding-left:20px">
-<li>Create a small API (Node/Express or Python/FastAPI) that wraps LibreOffice (<code>soffice --headless --convert-to pdf</code>) or Poppler/Tesseract.</li>
-<li>Package it with a Dockerfile and deploy to Render, Railway or Google Cloud Run.</li>
-<li>Call it from the page with <code>fetch('/api/convert', {method:'POST', body: formData})</code>.</li>
-<li>Add file-size limits, auto-delete uploads after a few minutes, and rate limiting.</li>
-</ol></div>
+<section id="faq">
+<h2>Questions</h2>
+<details><summary>Is it safe to upload my files?</summary><p>Files are sent over an encrypted connection and processed only to make your result. They are deleted right after the conversion, and any leftover is removed within minutes. Read the <a href="privacy.html">privacy page</a> for details.</p></details>
+<details><summary>Which tools work without uploading?</summary><p>Images to PDF, Merge PDF, Extract pages and Rotate PDF run entirely in your browser. The tools marked “Secure server” need an upload.</p></details>
+<details><summary>What is the file size limit?</summary><p>Tools that use the server accept files up to 25 MB. For bigger files, compress them first or split them with Extract pages.</p></details>
+<details><summary>Can EasyPDF recover a forgotten password?</summary><p>No. Unlock PDF only removes a password you already know.</p></details>
+<details><summary>My scanned PDF gives no text in Word. What now?</summary><p>Run OCR PDF first to make the text selectable, then convert the result to Word.</p></details>
 </section>
 </main>
-<footer><div class="wrap">© PDFKit · Browser tools run on your device; server tools delete files right after conversion</div></footer>
+<footer><div class="wrap">© 2026 EasyPDF · <a href="privacy.html">Privacy</a> · <a href="mailto:contact@easypdf.co.in">Contact</a><br>Browser tools run on your device; server tools delete files right after conversion.</div></footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script>
-// >>> Set this to your deployed backend URL, e.g. "https://pdfkit-api-xxxx.a.run.app"
-const API="https://api.easypdf.co.in";
+// Backend address. After api.easypdf.co.in works, change this to "https://api.easypdf.co.in"
+const API="https://pdfkit-backend-gi27.onrender.com";
 // Optional: must equal API_KEY on the backend. It is visible in the page source, so it is not a secret.
 const API_KEY="";
 const $=id=>document.getElementById(id);
@@ -112,7 +131,7 @@ const T=[
 {id:'merge',i:'🧩',n:'Merge PDF',d:'Join several PDFs into a single file.',m:1,acc:'application/pdf'},
 {id:'split',i:'✂️',n:'Extract pages',d:'Pull out pages or ranges, e.g. 1-3,5.',acc:'application/pdf',o:'<input type="text" id="rng" placeholder="Pages e.g. 1-3,5">'},
 {id:'rot',i:'🔄',n:'Rotate PDF',d:'Rotate all pages 90°, 180° or 270°.',acc:'application/pdf',o:'<select id="ang"><option>90</option><option>180</option><option>270</option></select>'},
-{id:'p2w',srv:'pdf-to-word',i:'📝',n:'PDF to Word',d:'Editable DOCX output.',acc:'application/pdf',o:'<select id="wm"><option value="auto">Auto (recommended)</option><option value="fast">Fast (plain text PDFs)</option><option value="accurate">Best layout (slower, keeps design)</option></select>',x:()=>({mode:$('wm').value})},
+{id:'p2w',srv:'pdf-to-word',i:'📝',n:'PDF to Word',d:'Editable DOCX output.',acc:'application/pdf',o:'<select id="wm"><option value="auto">Auto (recommended)</option><option value="fast">Fast (plain text PDFs)</option><option value="images">Page pictures (for scanned PDFs, not editable)</option><option value="accurate">Best layout (slower, keeps design)</option></select>',x:()=>({mode:$('wm').value})},
 {id:'w2p',srv:'word-to-pdf',i:'📄',n:'Word to PDF',d:'DOC/DOCX to PDF.',acc:'.doc,.docx,.odt,.rtf'},
 {id:'p2j',srv:'pdf-to-jpg',i:'📷',n:'PDF to JPG',d:'Each page as an image (ZIP).',acc:'application/pdf',o:'<select id="dpi"><option value="100">100 dpi</option><option value="150" selected>150 dpi</option><option value="200">200 dpi</option><option value="300">300 dpi</option></select>',x:()=>({dpi:$('dpi').value})},
 {id:'x2p',srv:'excel-to-pdf',i:'📊',n:'Excel to PDF',d:'Spreadsheets to PDF.',acc:'.xls,.xlsx,.ods,.csv'},
@@ -124,7 +143,7 @@ const T=[
 let cur=null,files=[];
 $('grid').innerHTML=T.map((t,k)=>`<button class="tool live" data-k="${k}"><div class="ic">${t.i}</div><h3>${t.n}</h3><p>${t.d}</p><span class="tag">${t.srv?'Secure server':'Runs in browser'}</span></button>`).join('');
 $('grid').onclick=e=>{const b=e.target.closest('.tool');if(!b)return;const t=T[b.dataset.k];open(t)};
-function open(t){cur=t;files=[];$('work').hidden=false;$('wt').textContent=t.n;$('wd').textContent=t.d;$('opts').innerHTML=t.o||'';$('inp').accept=t.acc;$('inp').multiple=!!t.m;$('files').innerHTML='';$('go').disabled=true;$('dl').hidden=true;$('msg').textContent='';$('work').scrollIntoView({behavior:'smooth'})}
+function open(t){cur=t;document.title=t.n+' – EasyPDF';files=[];$('work').hidden=false;$('wt').textContent=t.n;$('wd').textContent=t.d;$('opts').innerHTML=t.o||'';$('inp').accept=t.acc;$('inp').multiple=!!t.m;$('files').innerHTML='';$('go').disabled=true;$('dl').hidden=true;$('msg').textContent='';$('work').scrollIntoView({behavior:'smooth'})}
 function setF(l){files=[...l];$('files').innerHTML=files.map(f=>`<li>📎 ${f.name} (${(f.size/1024).toFixed(0)} KB)</li>`).join('');$('go').disabled=!files.length;$('dl').hidden=true}
 $('drop').onclick=()=>$('inp').click();
 $('inp').onchange=e=>setF(e.target.files);
@@ -160,7 +179,7 @@ r.upload.onload=()=>{t0=Date.now();const big=files[0].size>10*1048576;const tick
 r.onloadend=()=>clearInterval(tm);
 r.onload=async()=>{
 if(r.status===200){const m=/filename="?([^";]+)"?/.exec(r.getResponseHeader('Content-Disposition')||'');
-$('dl').href=URL.createObjectURL(r.response);$('dl').download=m?m[1]:'result';$('dl').hidden=false;$('msg').textContent='Done ✓ ('+(r.response.size/1024).toFixed(0)+' KB)'+(r.getResponseHeader('X-Word-Mode')==='fast-fallback'?'. The full-layout conversion took too long, so the fast converter was used. Complex designs may look simpler.':'')}
+$('dl').href=URL.createObjectURL(r.response);$('dl').download=m?m[1]:'result';$('dl').hidden=false;$('msg').textContent='Done ✓ ('+(r.response.size/1024).toFixed(0)+' KB)'+({'fast-fallback':'. The full-layout converter was too slow or found nothing, so the fast converter was used. Complex designs may look simpler.','images-fallback':'. No editable text could be extracted, so each page was placed in the Word file as a picture. For editable text, run OCR PDF first.'}[r.getResponseHeader('X-Word-Mode')]||'')}
 else{let d='Error '+r.status;try{d=JSON.parse(await r.response.text()).detail||d}catch(e){}$('msg').textContent='Error: '+d}
 $('go').disabled=false};
 r.onerror=()=>{$('msg').textContent='Could not reach the server. Check the API URL and ALLOWED_ORIGINS.';$('go').disabled=false};
@@ -168,15 +187,6 @@ $('msg').textContent='Connecting to server…';
 const wake=setTimeout(()=>{$('msg').textContent='Waking the server… this can take up to a minute on first use.'},6000);
 const ac=new AbortController();setTimeout(()=>ac.abort(),20000);
 fetch(API.replace(/\/$/,'')+'/health',{cache:'no-store',signal:ac.signal}).catch(()=>{}).finally(()=>{clearTimeout(wake);$('msg').textContent='Uploading…';r.send(fd)})}
-const D={
-'Netlify':[['Save the file','Name it <code>index.html</code> and put it in a folder, e.g. <code>pdfkit/</code>.'],['Open Netlify Drop','Go to app.netlify.com/drop and sign up (free).'],['Drag the folder','Drop the folder onto the page. Your site is live in seconds on a <code>.netlify.app</code> URL.'],['Custom domain','Site settings → Domain management → Add domain, then set the DNS records shown.'],['HTTPS','Enabled automatically with a free Let\'s Encrypt certificate.']],
-'GitHub Pages':[['Create a repo','On github.com create a public repo named <code>pdfkit</code>.'],['Upload files','Add <code>index.html</code> via “Add file → Upload files” or push with git:<pre>git init\ngit add .\ngit commit -m "init"\ngit remote add origin https://github.com/USER/pdfkit.git\ngit push -u origin main</pre>'],['Enable Pages','Settings → Pages → Source: “Deploy from a branch” → main / root → Save.'],['Visit your site','After about a minute: <code>https://USER.github.io/pdfkit</code>.'],['Custom domain','Add it under Pages → Custom domain and create a CNAME record at your DNS provider.']],
-'Vercel':[['Install the CLI','<pre>npm i -g vercel</pre>'],['Log in','<pre>vercel login</pre>'],['Deploy','From the folder holding <code>index.html</code>:<pre>vercel --prod</pre>'],['Connect Git (optional)','Import the GitHub repo in the Vercel dashboard for automatic deploys on every push.'],['Domain','Project → Settings → Domains → Add.']],
-'Cloudflare Pages':[['Push to GitHub','Put <code>index.html</code> in a repo.'],['Create project','Cloudflare dashboard → Workers &amp; Pages → Create → Pages → Connect to Git.'],['Build settings','Framework: None. Build command: empty. Output directory: <code>/</code>.'],['Deploy','Click Save and Deploy. Your site is live on <code>*.pages.dev</code>.'],['Domain','Custom domains tab → Set up a domain.']]};
-const names=Object.keys(D);
-function show(n){$('tabs').innerHTML=names.map(x=>`<button class="${x===n?'a':''}" data-n="${x}">${x}</button>`).join('');$('steps').innerHTML=D[n].map(s=>`<li><b>${s[0]}</b>${s[1]}</li>`).join('')}
-$('tabs').onclick=e=>{if(e.target.dataset.n)show(e.target.dataset.n)};
-show('Netlify');
 </script>
 <script src="pwa.js" defer></script>
 </body>

@@ -3,7 +3,7 @@
 (function () {
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", function () {
-      navigator.serviceWorker.register("sw.js").then(function (reg) {
+      navigator.serviceWorker.register("/sw.js").then(function (reg) {
         // Ask for periodic background refresh where the browser allows it
         if (reg.periodicSync) navigator.permissions.query({ name: "periodic-background-sync" })
           .then(function (p) { if (p.state === "granted") reg.periodicSync.register("refresh-shell", { minInterval: 86400000 }); })

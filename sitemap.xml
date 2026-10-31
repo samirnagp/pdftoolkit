@@ -2,4 +2,17 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://easypdf.co.in/</loc><lastmod>2026-10-31</lastmod><priority>1.0</priority></url>
   <url><loc>https://easypdf.co.in/privacy.html</loc><lastmod>2026-10-31</lastmod><priority>0.3</priority></url>
+  <url><loc>https://easypdf.co.in/pdf-to-word/</loc><lastmod>2026-10-31</lastmod><priority>0.8</priority></url>
+  <url><loc>https://easypdf.co.in/word-to-pdf/</loc><lastmod>2026-10-31</lastmod><priority>0.8</priority></url>
+  <url><loc>https://easypdf.co.in/pdf-to-jpg/</loc><lastmod>2026-10-31</lastmod><priority>0.8</priority></url>
+  <url><loc>https://easypdf.co.in/excel-to-pdf/</loc><lastmod>2026-10-31</lastmod><priority>0.8</priority></url>
+  <url><loc>https://easypdf.co.in/powerpoint-to-pdf/</loc><lastmod>2026-10-31</lastmod><priority>0.8</priority></url>
+  <url><loc>https://easypdf.co.in/compress-pdf/</loc><lastmod>2026-10-31</lastmod><priority>0.8</priority></url>
+  <url><loc>https://easypdf.co.in/protect-pdf/</loc><lastmod>2026-10-31</lastmod><priority>0.8</priority></url>
+  <url><loc>https://easypdf.co.in/unlock-pdf/</loc><lastmod>2026-10-31</lastmod><priority>0.8</priority></url>
+  <url><loc>https://easypdf.co.in/ocr-pdf/</loc><lastmod>2026-10-31</lastmod><priority>0.8</priority></url>
+  <url><loc>https://easypdf.co.in/images-to-pdf/</loc><lastmod>2026-10-31</lastmod><priority>0.8</priority></url>
+  <url><loc>https://easypdf.co.in/merge-pdf/</loc><lastmod>2026-10-31</lastmod><priority>0.8</priority></url>
+  <url><loc>https://easypdf.co.in/split-pdf/</loc><lastmod>2026-10-31</lastmod><priority>0.8</priority></url>
+  <url><loc>https://easypdf.co.in/rotate-pdf/</loc><lastmod>2026-10-31</lastmod><priority>0.8</priority></url>
 </urlset>

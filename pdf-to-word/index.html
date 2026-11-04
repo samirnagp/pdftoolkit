@@ -14,67 +14,61 @@
 <meta property="og:url" content="https://easypdf.co.in/pdf-to-word/">
 <meta property="og:image" content="https://easypdf.co.in/icons/icon-512.png">
 <meta name="twitter:card" content="summary">
+<meta name="apple-mobile-web-app-title" content="EasyPDF">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" type="image/png" href="/icons/icon-96.png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebApplication", "name": "EasyPDF PDF to Word", "url": "https://easypdf.co.in/pdf-to-word/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "description": "Convert PDF to editable Word (DOCX) online for free. Choose Auto, Fast or Best layout. Files are deleted right after conversion.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "INR"}}, {"@type": "HowTo", "name": "Convert PDF to Word", "step": [{"@type": "HowToStep", "position": 1, "name": "Choose your PDF file."}, {"@type": "HowToStep", "position": 2, "name": "Pick a mode. Auto is the best choice for most files."}, {"@type": "HowToStep", "position": 3, "name": "Click Convert, then download your .docx file."}]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why does my Word file look different from the PDF?", "acceptedAnswer": {"@type": "Answer", "text": "A PDF fixes every element in place, while Word reflows text. Best layout keeps the design closest to the original. Fast mode is quicker but simpler."}}, {"@type": "Question", "name": "Can I convert a scanned PDF to editable Word?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, in two steps. Run OCR PDF to make the text selectable, then convert the result to Word."}}, {"@type": "Question", "name": "Is PDF to Word free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. There is no sign-up and no watermark."}}]}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "EasyPDF", "item": "https://easypdf.co.in/"}, {"@type": "ListItem", "position": 2, "name": "PDF to Word", "item": "https://easypdf.co.in/pdf-to-word/"}]}]}</script>
-<link rel="stylesheet" href="/assets/easypdf.css?v=1">
+<link rel="stylesheet" href="/assets/easypdf.css?v=3">
 </head>
 <body>
-<header><div class="wrap"><nav>
-<a class="logo" href="/" style="color:inherit;text-decoration:none">Easy<b>PDF</b></a>
-<div><a href="/#tools">All tools</a><a href="/#about">About</a><a href="/privacy.html" class="keep">Privacy</a></div>
+<header class="top"><div class="wrap"><nav>
+<a class="logo" href="/">Easy<b>PDF</b></a>
+<a class="l" href="/#tools">Tools</a><a class="l" href="/#about">About</a><a class="l keep" href="/privacy.html">Privacy</a>
 </nav></div></header>
-
 <main class="wrap">
 <p class="crumb"><a href="/">Home</a> › PDF to Word</p>
-<div class="hero t">
-<span class="badge">🔒 Secure server. Your file is deleted right after conversion.</span>
-<h1>Convert PDF to Word</h1>
-<p>Turn a PDF into a Word document you can edit. Auto mode tries the best layout first and switches to a faster method if the file is complex, so you always get a usable file.</p>
+<div class="hero t"><span class="badge">🔒 Secure server. Your file is deleted right after conversion.</span><h1>Convert PDF to Word</h1><p>Turn a PDF into a Word document you can edit. Auto mode tries the best layout first and switches to a faster method if the file is complex, so you always get a usable file.</p></div>
+<section class="ws" id="work" data-state="idle" hidden aria-labelledby="wt">
+<div class="ws-head"><span class="ico" id="wic"></span><div><h2 id="wt"></h2><p id="wd"></p></div></div>
+<div class="dz" id="drop" tabindex="0" role="button" aria-label="Drop files here, or press Enter to choose files">
+<span class="up"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4 M7 9l5-5 5 5 M4 20h16"/></svg></span><p class="t" id="dzt">Drop your file here</p><p class="s" id="dzh"></p><button class="btn lg" id="pick" type="button"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4 M7 9l5-5 5 5 M4 20h16"/></svg><span>Choose file</span></button>
 </div>
-
-<div class="panel" id="work" hidden>
-<h2 id="wt"></h2><p id="wd" style="color:var(--mu);margin:0 0 14px"></p>
-<div class="drop" id="drop">Tap to choose files or drag &amp; drop here</div>
 <input type="file" id="inp" hidden>
-<ul id="files"></ul>
-<div class="row" id="opts"></div>
-<div class="row"><button class="p" id="go" disabled>Convert</button><a class="p" id="dl" hidden>Download</a></div>
-<div id="msg" aria-live="polite"></div>
+<p class="msg" id="ferr" hidden role="alert"></p>
+<ul class="files" id="files" aria-label="Selected files"></ul>
+<p class="note" id="fnote" aria-live="polite"></p>
+<div class="opts" id="opts"></div>
+<div class="actions" id="main"><button class="btn lg" id="go" type="button" disabled><span id="gol">Convert</span></button></div>
+<div class="prog" id="prog" hidden aria-live="polite">
+<div class="prog-top"><span id="stage"></span><span id="pct"></span></div>
+<div class="bar" id="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><i id="barfill"></i></div>
+<p class="note" id="pnote"></p>
+<button class="btn ghost" id="cancel" type="button">Cancel</button>
 </div>
-
-<section class="sec">
-<h2>How to use PDF to Word</h2>
-<ol class="steps" style="margin-top:12px"><li>Choose your PDF file.</li><li>Pick a mode. Auto is the best choice for most files.</li><li>Click Convert, then download your .docx file.</li></ol>
+<div class="res ok" id="ok" hidden role="status">
+<div class="mark"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg></div><h3>Your file is ready</h3><p class="fn" id="okfn"></p><p class="note" id="oknote"></p>
+<div class="actions"><a class="btn lg" id="dl" href="#"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12 M7 11l5 5 5-5 M4 20h16"/></svg><span>Download</span></a><button class="btn ghost lg" id="again" type="button">Convert another file</button></div>
+</div>
+<div class="res err" id="err" hidden role="alert">
+<div class="mark"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12 M18 6L6 18"/></svg></div><h3 id="errt"></h3><p id="errm"></p><p class="hint" id="errh"></p>
+<div class="actions"><button class="btn lg" id="retry" type="button">Try again</button><button class="btn ghost lg" id="other" type="button">Choose another file</button></div>
+</div>
 </section>
+<section class="sec"><h2>How to use PDF to Word</h2><ol class="steps"><li>Choose your PDF file.</li><li>Pick a mode. Auto is the best choice for most files.</li><li>Click Convert, then download your .docx file.</li></ol></section>
+<section class="sec"><h2>Why use EasyPDF</h2><div class="cards3" style="margin-top:12px"><div class="card3"><h3>Four modes</h3><p>Auto, Fast, Best layout or Page pictures, so you can trade speed against layout accuracy.</p></div><div class="card3"><h3>Never an empty file</h3><p>Every result is checked, and the tool falls back to a safer method if no text could be read.</p></div><div class="card3"><h3>Deleted after conversion</h3><p>Your PDF is removed from our server as soon as your Word file is sent.</p></div></div></section>
+<section class="sec"><h2>Good to know</h2><ul class="notes"><li>Auto tries the full-layout converter first and uses a faster one if it takes too long. A message tells you which was used.</li><li>Scanned PDFs contain pictures of text, not real text. Run OCR PDF first for editable text, or choose Page pictures to keep the look.</li><li>Files up to 25 MB are accepted. Very long documents may be limited in Best layout mode.</li></ul></section>
 
-<section class="sec">
-<h2>Why use EasyPDF</h2>
-<div class="cards3" style="margin-top:12px"><div class="card3"><h3>Four modes</h3><p>Auto, Fast, Best layout or Page pictures, so you can trade speed against layout accuracy.</p></div><div class="card3"><h3>Never an empty file</h3><p>Every result is checked, and the tool falls back to a safer method if no text could be read.</p></div><div class="card3"><h3>Deleted after conversion</h3><p>Your PDF is removed from our server as soon as your Word file is sent.</p></div></div>
-</section>
-
-<section class="sec">
-<h2>Good to know</h2>
-<ul class="notes"><li>Auto tries the full-layout converter first and uses a faster one if it takes too long. A message tells you which was used.</li><li>Scanned PDFs contain pictures of text, not real text. Run OCR PDF first for editable text, or choose Page pictures to keep the look.</li><li>Files up to 25 MB are accepted. Very long documents may be limited in Best layout mode.</li></ul>
-</section>
-
-<section class="sec">
-<h2>Questions about PDF to Word</h2>
-<div style="margin-top:12px"><details><summary>Why does my Word file look different from the PDF?</summary><p>A PDF fixes every element in place, while Word reflows text. Best layout keeps the design closest to the original. Fast mode is quicker but simpler.</p></details><details><summary>Can I convert a scanned PDF to editable Word?</summary><p>Yes, in two steps. Run OCR PDF to make the text selectable, then convert the result to Word.</p></details><details><summary>Is PDF to Word free?</summary><p>Yes. There is no sign-up and no watermark.</p></details></div>
-</section>
-
-<section class="sec">
-<h2>More PDF tools</h2>
-<div class="rel"><a href="/ocr-pdf/"><b>🔍 OCR PDF</b><span>Make scanned PDFs searchable.</span></a><a href="/word-to-pdf/"><b>📄 Word to PDF</b><span>DOC and DOCX to PDF.</span></a><a href="/compress-pdf/"><b>🗜️ Compress PDF</b><span>Reduce file size.</span></a><a href="/unlock-pdf/"><b>🔓 Unlock PDF</b><span>Remove the password from a PDF you own.</span></a></div>
-</section>
+<section class="sec"><h2>Questions about PDF to Word</h2><div style="margin-top:12px"><details><summary>Why does my Word file look different from the PDF?</summary><p>A PDF fixes every element in place, while Word reflows text. Best layout keeps the design closest to the original. Fast mode is quicker but simpler.</p></details><details><summary>Can I convert a scanned PDF to editable Word?</summary><p>Yes, in two steps. Run OCR PDF to make the text selectable, then convert the result to Word.</p></details><details><summary>Is PDF to Word free?</summary><p>Yes. There is no sign-up and no watermark.</p></details></div></section>
+<section class="sec"><h2>More PDF tools</h2><div class="rel"><a href="/ocr-pdf/" data-g="edit"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5a1 1 0 0 1 1-1h3 M16 4h3a1 1 0 0 1 1 1v3 M20 16v3a1 1 0 0 1-1 1h-3 M8 20H5a1 1 0 0 1-1-1v-3 M8 9h8 M8 12h8 M8 15h5"/></svg></span><span><b>OCR PDF</b><span class="d">Make scanned PDFs searchable.</span></span></a><a href="/word-to-pdf/" data-g="convert"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z M14 3v5h5 M12 11v6 M9.5 14.5L12 17l2.5-2.5"/></svg></span><span><b>Word to PDF</b><span class="d">DOC and DOCX to PDF.</span></span></a><a href="/compress-pdf/" data-g="compress"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14h6v6 M20 10h-6V4 M14 10l7-7 M3 21l7-7"/></svg></span><span><b>Compress PDF</b><span class="d">Reduce file size.</span></span></a><a href="/unlock-pdf/" data-g="protect"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 11h14v10H5z M7 11V8a5 5 0 0 1 9.6-2 M12 15v2"/></svg></span><span><b>Unlock PDF</b><span class="d">Remove the password from a PDF you own.</span></span></a></div></section>
 </main>
-
 <footer><div class="wrap">© 2026 EasyPDF · <a href="/">Home</a> · <a href="/privacy.html">Privacy</a> · <a href="mailto:contact@easypdf.co.in">Contact</a><br>Browser tools run on your device; server tools delete files right after conversion.</div></footer>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script>window.EASYPDF_TOOL="p2w";</script>
-<script src="/assets/config.js?v=1"></script>
-<script src="/assets/easypdf.js?v=1"></script>
+<script src="/assets/icons.js?v=3"></script>
+<script src="/assets/tools.js?v=3"></script>
+<script src="/assets/config.js?v=3"></script>
+<script src="/assets/easypdf.js?v=3"></script>
 <script src="/pwa.js" defer></script>
 </body>
 </html>

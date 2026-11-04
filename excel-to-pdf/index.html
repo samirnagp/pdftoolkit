@@ -14,67 +14,61 @@
 <meta property="og:url" content="https://easypdf.co.in/excel-to-pdf/">
 <meta property="og:image" content="https://easypdf.co.in/icons/icon-512.png">
 <meta name="twitter:card" content="summary">
+<meta name="apple-mobile-web-app-title" content="EasyPDF">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" type="image/png" href="/icons/icon-96.png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebApplication", "name": "EasyPDF Excel to PDF", "url": "https://easypdf.co.in/excel-to-pdf/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "description": "Convert Excel spreadsheets (XLS, XLSX, ODS, CSV) to PDF online for free. No sign-up, and files are deleted right after conversion.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "INR"}}, {"@type": "HowTo", "name": "Convert Excel to PDF", "step": [{"@type": "HowToStep", "position": 1, "name": "Choose your spreadsheet (.xls, .xlsx, .ods or .csv)."}, {"@type": "HowToStep", "position": 2, "name": "Click Convert."}, {"@type": "HowToStep", "position": 3, "name": "Download your PDF."}]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why is my spreadsheet split over many pages?", "acceptedAnswer": {"@type": "Answer", "text": "The PDF follows the sheet’s print settings. Fit the columns to one page width in Excel for a cleaner result."}}, {"@type": "Question", "name": "Are all sheets converted?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, the sheets in the workbook are included in the PDF."}}, {"@type": "Question", "name": "Can I merge the PDF with other documents?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Use Merge PDF after conversion."}}]}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "EasyPDF", "item": "https://easypdf.co.in/"}, {"@type": "ListItem", "position": 2, "name": "Excel to PDF", "item": "https://easypdf.co.in/excel-to-pdf/"}]}]}</script>
-<link rel="stylesheet" href="/assets/easypdf.css?v=1">
+<link rel="stylesheet" href="/assets/easypdf.css?v=3">
 </head>
 <body>
-<header><div class="wrap"><nav>
-<a class="logo" href="/" style="color:inherit;text-decoration:none">Easy<b>PDF</b></a>
-<div><a href="/#tools">All tools</a><a href="/#about">About</a><a href="/privacy.html" class="keep">Privacy</a></div>
+<header class="top"><div class="wrap"><nav>
+<a class="logo" href="/">Easy<b>PDF</b></a>
+<a class="l" href="/#tools">Tools</a><a class="l" href="/#about">About</a><a class="l keep" href="/privacy.html">Privacy</a>
 </nav></div></header>
-
 <main class="wrap">
 <p class="crumb"><a href="/">Home</a> › Excel to PDF</p>
-<div class="hero t">
-<span class="badge">🔒 Secure server. Your file is deleted right after conversion.</span>
-<h1>Convert Excel to PDF</h1>
-<p>Turn a spreadsheet into a PDF you can share or print. Upload your workbook and download the PDF.</p>
+<div class="hero t"><span class="badge">🔒 Secure server. Your file is deleted right after conversion.</span><h1>Convert Excel to PDF</h1><p>Turn a spreadsheet into a PDF you can share or print. Upload your workbook and download the PDF.</p></div>
+<section class="ws" id="work" data-state="idle" hidden aria-labelledby="wt">
+<div class="ws-head"><span class="ico" id="wic"></span><div><h2 id="wt"></h2><p id="wd"></p></div></div>
+<div class="dz" id="drop" tabindex="0" role="button" aria-label="Drop files here, or press Enter to choose files">
+<span class="up"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4 M7 9l5-5 5 5 M4 20h16"/></svg></span><p class="t" id="dzt">Drop your file here</p><p class="s" id="dzh"></p><button class="btn lg" id="pick" type="button"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4 M7 9l5-5 5 5 M4 20h16"/></svg><span>Choose file</span></button>
 </div>
-
-<div class="panel" id="work" hidden>
-<h2 id="wt"></h2><p id="wd" style="color:var(--mu);margin:0 0 14px"></p>
-<div class="drop" id="drop">Tap to choose files or drag &amp; drop here</div>
 <input type="file" id="inp" hidden>
-<ul id="files"></ul>
-<div class="row" id="opts"></div>
-<div class="row"><button class="p" id="go" disabled>Convert</button><a class="p" id="dl" hidden>Download</a></div>
-<div id="msg" aria-live="polite"></div>
+<p class="msg" id="ferr" hidden role="alert"></p>
+<ul class="files" id="files" aria-label="Selected files"></ul>
+<p class="note" id="fnote" aria-live="polite"></p>
+<div class="opts" id="opts"></div>
+<div class="actions" id="main"><button class="btn lg" id="go" type="button" disabled><span id="gol">Convert</span></button></div>
+<div class="prog" id="prog" hidden aria-live="polite">
+<div class="prog-top"><span id="stage"></span><span id="pct"></span></div>
+<div class="bar" id="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><i id="barfill"></i></div>
+<p class="note" id="pnote"></p>
+<button class="btn ghost" id="cancel" type="button">Cancel</button>
 </div>
-
-<section class="sec">
-<h2>How to use Excel to PDF</h2>
-<ol class="steps" style="margin-top:12px"><li>Choose your spreadsheet (.xls, .xlsx, .ods or .csv).</li><li>Click Convert.</li><li>Download your PDF.</li></ol>
+<div class="res ok" id="ok" hidden role="status">
+<div class="mark"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg></div><h3>Your file is ready</h3><p class="fn" id="okfn"></p><p class="note" id="oknote"></p>
+<div class="actions"><a class="btn lg" id="dl" href="#"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12 M7 11l5 5 5-5 M4 20h16"/></svg><span>Download</span></a><button class="btn ghost lg" id="again" type="button">Convert another file</button></div>
+</div>
+<div class="res err" id="err" hidden role="alert">
+<div class="mark"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12 M18 6L6 18"/></svg></div><h3 id="errt"></h3><p id="errm"></p><p class="hint" id="errh"></p>
+<div class="actions"><button class="btn lg" id="retry" type="button">Try again</button><button class="btn ghost lg" id="other" type="button">Choose another file</button></div>
+</div>
 </section>
+<section class="sec"><h2>How to use Excel to PDF</h2><ol class="steps"><li>Choose your spreadsheet (.xls, .xlsx, .ods or .csv).</li><li>Click Convert.</li><li>Download your PDF.</li></ol></section>
+<section class="sec"><h2>Why use EasyPDF</h2><div class="cards3" style="margin-top:12px"><div class="card3"><h3>Share without editing</h3><p>Recipients see your numbers and formatting, but can’t change the cells.</p></div><div class="card3"><h3>Common formats</h3><p>XLS, XLSX, ODS and CSV files are supported.</p></div><div class="card3"><h3>Deleted after conversion</h3><p>Your file is removed from our server as soon as the PDF is sent.</p></div></div></section>
+<section class="sec"><h2>Good to know</h2><ul class="notes"><li>Wide sheets can spread across several pages. In Excel, set the print area and choose to fit all columns on one page before you upload.</li><li>Formulas are shown as their calculated values.</li><li>Files up to 25 MB are accepted.</li></ul></section>
 
-<section class="sec">
-<h2>Why use EasyPDF</h2>
-<div class="cards3" style="margin-top:12px"><div class="card3"><h3>Share without editing</h3><p>Recipients see your numbers and formatting, but can’t change the cells.</p></div><div class="card3"><h3>Common formats</h3><p>XLS, XLSX, ODS and CSV files are supported.</p></div><div class="card3"><h3>Deleted after conversion</h3><p>Your file is removed from our server as soon as the PDF is sent.</p></div></div>
-</section>
-
-<section class="sec">
-<h2>Good to know</h2>
-<ul class="notes"><li>Wide sheets can spread across several pages. In Excel, set the print area and choose to fit all columns on one page before you upload.</li><li>Formulas are shown as their calculated values.</li><li>Files up to 25 MB are accepted.</li></ul>
-</section>
-
-<section class="sec">
-<h2>Questions about Excel to PDF</h2>
-<div style="margin-top:12px"><details><summary>Why is my spreadsheet split over many pages?</summary><p>The PDF follows the sheet’s print settings. Fit the columns to one page width in Excel for a cleaner result.</p></details><details><summary>Are all sheets converted?</summary><p>Yes, the sheets in the workbook are included in the PDF.</p></details><details><summary>Can I merge the PDF with other documents?</summary><p>Yes. Use Merge PDF after conversion.</p></details></div>
-</section>
-
-<section class="sec">
-<h2>More PDF tools</h2>
-<div class="rel"><a href="/word-to-pdf/"><b>📄 Word to PDF</b><span>DOC and DOCX to PDF.</span></a><a href="/powerpoint-to-pdf/"><b>📽️ PowerPoint to PDF</b><span>Slides to PDF.</span></a><a href="/merge-pdf/"><b>🧩 Merge PDF</b><span>Join several PDFs into one.</span></a><a href="/compress-pdf/"><b>🗜️ Compress PDF</b><span>Reduce file size.</span></a></div>
-</section>
+<section class="sec"><h2>Questions about Excel to PDF</h2><div style="margin-top:12px"><details><summary>Why is my spreadsheet split over many pages?</summary><p>The PDF follows the sheet’s print settings. Fit the columns to one page width in Excel for a cleaner result.</p></details><details><summary>Are all sheets converted?</summary><p>Yes, the sheets in the workbook are included in the PDF.</p></details><details><summary>Can I merge the PDF with other documents?</summary><p>Yes. Use Merge PDF after conversion.</p></details></div></section>
+<section class="sec"><h2>More PDF tools</h2><div class="rel"><a href="/word-to-pdf/" data-g="convert"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z M14 3v5h5 M12 11v6 M9.5 14.5L12 17l2.5-2.5"/></svg></span><span><b>Word to PDF</b><span class="d">DOC and DOCX to PDF.</span></span></a><a href="/powerpoint-to-pdf/" data-g="convert"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h18 M5 4v11h14V4 M12 15v5 M8 20h8"/></svg></span><span><b>PowerPoint to PDF</b><span class="d">Slides to PDF.</span></span></a><a href="/merge-pdf/" data-g="organize"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z M3 12.5l9 5 9-5 M3 17l9 5 9-5"/></svg></span><span><b>Merge PDF</b><span class="d">Join several PDFs into one.</span></span></a><a href="/compress-pdf/" data-g="compress"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14h6v6 M20 10h-6V4 M14 10l7-7 M3 21l7-7"/></svg></span><span><b>Compress PDF</b><span class="d">Reduce file size.</span></span></a></div></section>
 </main>
-
 <footer><div class="wrap">© 2026 EasyPDF · <a href="/">Home</a> · <a href="/privacy.html">Privacy</a> · <a href="mailto:contact@easypdf.co.in">Contact</a><br>Browser tools run on your device; server tools delete files right after conversion.</div></footer>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script>window.EASYPDF_TOOL="x2p";</script>
-<script src="/assets/config.js?v=1"></script>
-<script src="/assets/easypdf.js?v=1"></script>
+<script src="/assets/icons.js?v=3"></script>
+<script src="/assets/tools.js?v=3"></script>
+<script src="/assets/config.js?v=3"></script>
+<script src="/assets/easypdf.js?v=3"></script>
 <script src="/pwa.js" defer></script>
 </body>
 </html>

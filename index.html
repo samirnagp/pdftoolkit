@@ -3,56 +3,88 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" href="icons/icon-96.png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<meta name="theme-color" content="#d9480f">
 <title>EasyPDF – Free Online PDF Tools: Merge, Convert, Compress, Unlock</title>
 <meta name="description" content="EasyPDF is a free online PDF toolkit. Merge, split, rotate, compress, protect and unlock PDFs, and convert PDF to Word, Word to PDF, Excel, PowerPoint and JPG. No sign-up.">
 <link rel="canonical" href="https://easypdf.co.in/">
+<meta name="theme-color" content="#d9480f">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="EasyPDF">
-<meta property="og:title" content="EasyPDF – Free Online PDF Tools">
-<meta property="og:description" content="Merge, split, compress, protect, unlock and convert PDFs. Free, fast and private.">
+<meta property="og:title" content="EasyPDF – Free Online PDF Tools: Merge, Convert, Compress, Unlock">
+<meta property="og:description" content="EasyPDF is a free online PDF toolkit. Merge, split, rotate, compress, protect and unlock PDFs, and convert PDF to Word, Word to PDF, Excel, PowerPoint and JPG. No sign-up.">
 <meta property="og:url" content="https://easypdf.co.in/">
 <meta property="og:image" content="https://easypdf.co.in/icons/icon-512.png">
 <meta name="twitter:card" content="summary">
 <meta name="apple-mobile-web-app-title" content="EasyPDF">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "EasyPDF", "url": "https://easypdf.co.in/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "browserRequirements": "Requires a modern web browser", "description": "Free online PDF tools: merge, split, rotate, compress, protect, unlock and convert PDFs.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "INR"}, "featureList": ["Merge PDF", "Extract pages", "Rotate PDF", "Images to PDF", "PDF to Word", "Word to PDF", "PDF to JPG", "Excel to PDF", "PowerPoint to PDF", "Compress PDF", "Protect PDF", "Unlock PDF", "OCR PDF"]}</script>
-<link rel="stylesheet" href="/assets/easypdf.css?v=1">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/png" href="/icons/icon-96.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "EasyPDF", "url": "https://easypdf.co.in/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "description": "EasyPDF is a free online PDF toolkit. Merge, split, rotate, compress, protect and unlock PDFs, and convert PDF to Word, Word to PDF, Excel, PowerPoint and JPG. No sign-up.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "INR"}, "featureList": ["PDF to Word", "Word to PDF", "PDF to JPG", "Excel to PDF", "PowerPoint to PDF", "Compress PDF", "Protect PDF", "Unlock PDF", "OCR PDF", "Images to PDF", "Merge PDF", "Extract Pages", "Rotate PDF"]}</script>
+<link rel="stylesheet" href="/assets/easypdf.css?v=3">
 </head>
 <body>
-<header><div class="wrap"><nav><a class="logo" href="./" style="color:inherit;text-decoration:none">Easy<b>PDF</b></a><div><a href="#tools">Tools</a><a href="#about">About</a><a href="privacy.html" class="keep">Privacy</a></div></nav></div></header>
-
+<header class="top"><div class="wrap"><nav>
+<a class="logo" href="/">Easy<b>PDF</b></a>
+<a class="l" href="/#tools">Tools</a><a class="l" href="/#about">About</a><a class="l keep" href="/privacy.html">Privacy</a>
+</nav></div></header>
 <main class="wrap">
 <div class="hero">
-<span class="badge">🔒 Private by design · server uploads are auto-deleted</span>
-<h1>Every PDF tool,<br>one simple place.</h1>
-<p>Merge, split, rotate and convert PDFs to and from Word, Excel, PowerPoint and images. Fast, free, private.</p>
+<span class="badge">Free · No sign-up · Files deleted after conversion</span>
+<h1>Every PDF tool, <span>one simple place.</span></h1>
+<p>Upload a file, pick what you want to do, and download the result.</p>
 </div>
 
-<section id="tools">
-<h2>All tools</h2>
-<div class="grid" id="grid"></div>
+<section class="start" id="start" aria-label="Upload a file">
+<div class="dz big" id="hdrop" tabindex="0" role="button" aria-label="Drop a file here, or press Enter to choose one">
+<span class="up"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4 M7 9l5-5 5 5 M4 20h16"/></svg></span><p class="t">Drop your file here</p><p class="s">PDF, Word, Excel, PowerPoint, JPG or PNG · up to 25 MB</p><button class="btn lg" id="hpick" type="button"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4 M7 9l5-5 5 5 M4 20h16"/></svg><span>Choose file</span></button>
+</div>
+<input type="file" id="hinp" hidden multiple accept=".pdf,.doc,.docx,.odt,.rtf,.xls,.xlsx,.ods,.csv,.ppt,.pptx,.odp,.jpg,.jpeg,.png">
+<p class="msg" id="herr" hidden role="alert"></p>
+<div class="suggest" id="suggest" hidden aria-live="polite"></div>
+</section>
 
-<div class="panel" id="work" hidden>
-<h2 id="wt"></h2><p id="wd" style="color:var(--mu);margin:0 0 14px"></p>
-<div class="drop" id="drop">Tap to choose files or drag &amp; drop here</div>
+<section class="find" id="tools">
+<label for="q">What do you want to do with your PDF?</label>
+<div class="sbox"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16z M21 21l-4.3-4.3"/></svg><input id="q" type="search" placeholder="Try “merge”, “Word”, “compress” or “password”" autocomplete="off"><button class="x" id="qclear" type="button" aria-label="Clear search" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12 M18 6L6 18"/></svg></button></div>
+<div class="chips"><button class="chip" type="button" data-q="merge">Merge PDFs</button><button class="chip" type="button" data-q="word">Convert to Word</button><button class="chip" type="button" data-q="compress">Compress</button><button class="chip" type="button" data-q="password">Add a password</button><button class="chip" type="button" data-q="scan">Scanned PDF</button><button class="chip" type="button" data-q="jpg">PDF to image</button></div>
+</section>
+
+<section class="ws" id="work" data-state="idle" hidden aria-labelledby="wt">
+<div class="ws-head"><span class="ico" id="wic"></span><div><h2 id="wt"></h2><p id="wd"></p></div><button class="btn ghost" id="wclose" type="button">Change tool</button></div>
+<div class="dz" id="drop" tabindex="0" role="button" aria-label="Drop files here, or press Enter to choose files">
+<span class="up"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4 M7 9l5-5 5 5 M4 20h16"/></svg></span><p class="t" id="dzt">Drop your file here</p><p class="s" id="dzh"></p><button class="btn lg" id="pick" type="button"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4 M7 9l5-5 5 5 M4 20h16"/></svg><span>Choose file</span></button>
+</div>
 <input type="file" id="inp" hidden>
-<ul id="files"></ul>
-<div class="row" id="opts"></div>
-<div class="row"><button class="p" id="go" disabled>Convert</button><a class="p" id="dl" hidden>Download</a></div>
-<div id="msg"></div>
+<p class="msg" id="ferr" hidden role="alert"></p>
+<ul class="files" id="files" aria-label="Selected files"></ul>
+<p class="note" id="fnote" aria-live="polite"></p>
+<div class="opts" id="opts"></div>
+<div class="actions" id="main"><button class="btn lg" id="go" type="button" disabled><span id="gol">Convert</span></button></div>
+<div class="prog" id="prog" hidden aria-live="polite">
+<div class="prog-top"><span id="stage"></span><span id="pct"></span></div>
+<div class="bar" id="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><i id="barfill"></i></div>
+<p class="note" id="pnote"></p>
+<button class="btn ghost" id="cancel" type="button">Cancel</button>
+</div>
+<div class="res ok" id="ok" hidden role="status">
+<div class="mark"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg></div><h3>Your file is ready</h3><p class="fn" id="okfn"></p><p class="note" id="oknote"></p>
+<div class="actions"><a class="btn lg" id="dl" href="#"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12 M7 11l5 5 5-5 M4 20h16"/></svg><span>Download</span></a><button class="btn ghost lg" id="again" type="button">Convert another file</button></div>
+</div>
+<div class="res err" id="err" hidden role="alert">
+<div class="mark"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12 M18 6L6 18"/></svg></div><h3 id="errt"></h3><p id="errm"></p><p class="hint" id="errh"></p>
+<div class="actions"><button class="btn lg" id="retry" type="button">Try again</button><button class="btn ghost lg" id="other" type="button">Choose another file</button></div>
 </div>
 </section>
 
-<section id="all">
-<h2>Explore every tool</h2>
-<p class="lead">Open a tool’s own page for tips, steps and answers.</p>
-<div class="rel" id="alltools"><a href="/pdf-to-word/"><b>📝 PDF to Word</b><span>Editable DOCX from any PDF.</span></a><a href="/word-to-pdf/"><b>📄 Word to PDF</b><span>DOC and DOCX to PDF.</span></a><a href="/pdf-to-jpg/"><b>📷 PDF to JPG</b><span>Each page as an image (ZIP).</span></a><a href="/excel-to-pdf/"><b>📊 Excel to PDF</b><span>Spreadsheets to PDF.</span></a><a href="/powerpoint-to-pdf/"><b>📽️ PowerPoint to PDF</b><span>Slides to PDF.</span></a><a href="/compress-pdf/"><b>🗜️ Compress PDF</b><span>Reduce file size.</span></a><a href="/protect-pdf/"><b>🔐 Protect PDF</b><span>Add a password (AES-256).</span></a><a href="/unlock-pdf/"><b>🔓 Unlock PDF</b><span>Remove the password from a PDF you own.</span></a><a href="/ocr-pdf/"><b>🔍 OCR PDF</b><span>Make scanned PDFs searchable.</span></a><a href="/images-to-pdf/"><b>🖼️ Images to PDF</b><span>JPG and PNG into one PDF.</span></a><a href="/merge-pdf/"><b>🧩 Merge PDF</b><span>Join several PDFs into one.</span></a><a href="/split-pdf/"><b>✂️ Extract Pages</b><span>Pull out pages or ranges.</span></a><a href="/rotate-pdf/"><b>🔄 Rotate PDF</b><span>Rotate all pages 90°, 180° or 270°.</span></a></div>
-</section>
+<div id="groups">
+<section class="grp" aria-labelledby="g-convert"><div class="grp-h"><span class="ico" data-g="convert"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h14l-3.5-3.5 M20 17H6l3.5 3.5"/></svg></span><div><h2 id="g-convert">Convert</h2><p>Change a file into another format</p></div></div><div class="cards"><a class="card" href="/pdf-to-word/" data-id="p2w" data-g="convert"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z M14 3v5h5 M9 13h6 M9 17h6"/></svg></span><span><b>PDF to Word</b><small>Editable DOCX from any PDF.</small></span></a><a class="card" href="/word-to-pdf/" data-id="w2p" data-g="convert"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z M14 3v5h5 M12 11v6 M9.5 14.5L12 17l2.5-2.5"/></svg></span><span><b>Word to PDF</b><small>DOC and DOCX to PDF.</small></span></a><a class="card" href="/pdf-to-jpg/" data-id="p2j" data-g="convert"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4z M4 16l4.5-4.5 4 4 2.5-2.5 5 5 M9 9.5h.01"/></svg></span><span><b>PDF to JPG</b><small>Each page as an image (ZIP).</small></span></a><a class="card" href="/excel-to-pdf/" data-id="x2p" data-g="convert"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4z M4 10h16 M10 5v14"/></svg></span><span><b>Excel to PDF</b><small>Spreadsheets to PDF.</small></span></a><a class="card" href="/powerpoint-to-pdf/" data-id="s2p" data-g="convert"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h18 M5 4v11h14V4 M12 15v5 M8 20h8"/></svg></span><span><b>PowerPoint to PDF</b><small>Slides to PDF.</small></span></a><a class="card" href="/images-to-pdf/" data-id="img" data-g="convert"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z M14 3v5h5 M8 17l3-3 2.5 2.5L15 15l2 2"/></svg></span><span><b>Images to PDF</b><small>JPG and PNG into one PDF.</small></span></a></div></section>
+<section class="grp" aria-labelledby="g-organize"><div class="grp-h"><span class="ico" data-g="organize"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z M3 12.5l9 5 9-5 M3 17l9 5 9-5"/></svg></span><div><h2 id="g-organize">Organize</h2><p>Merge, split and arrange pages</p></div></div><div class="cards"><a class="card" href="/merge-pdf/" data-id="merge" data-g="organize"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z M3 12.5l9 5 9-5 M3 17l9 5 9-5"/></svg></span><span><b>Merge PDF</b><small>Join several PDFs into one.</small></span></a><a class="card" href="/split-pdf/" data-id="split" data-g="organize"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z M6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6z M20 4L8.12 15.88 M14.47 14.48L20 20 M8.12 8.12L12 12"/></svg></span><span><b>Extract Pages</b><small>Pull out pages or ranges.</small></span></a></div></section>
+<section class="grp" aria-labelledby="g-compress"><div class="grp-h"><span class="ico" data-g="compress"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14h6v6 M20 10h-6V4 M14 10l7-7 M3 21l7-7"/></svg></span><div><h2 id="g-compress">Compress</h2><p>Make files smaller</p></div></div><div class="cards"><a class="card" href="/compress-pdf/" data-id="cmp" data-g="compress"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14h6v6 M20 10h-6V4 M14 10l7-7 M3 21l7-7"/></svg></span><span><b>Compress PDF</b><small>Reduce file size.</small></span></a></div></section>
+<section class="grp" aria-labelledby="g-edit"><div class="grp-h"><span class="ico" data-g="edit"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z M13.5 6.5l4 4"/></svg></span><div><h2 id="g-edit">Edit</h2><p>Rotate pages and read scanned text</p></div></div><div class="cards"><a class="card" href="/ocr-pdf/" data-id="ocr" data-g="edit"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5a1 1 0 0 1 1-1h3 M16 4h3a1 1 0 0 1 1 1v3 M20 16v3a1 1 0 0 1-1 1h-3 M8 20H5a1 1 0 0 1-1-1v-3 M8 9h8 M8 12h8 M8 15h5"/></svg></span><span><b>OCR PDF</b><small>Make scanned PDFs searchable.</small></span></a><a class="card" href="/rotate-pdf/" data-id="rot" data-g="edit"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7 M21 3v6h-6"/></svg></span><span><b>Rotate PDF</b><small>Rotate all pages 90°, 180° or 270°.</small></span></a></div></section>
+<section class="grp" aria-labelledby="g-protect"><div class="grp-h"><span class="ico" data-g="protect"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg></span><div><h2 id="g-protect">Protect</h2><p>Add or remove a password</p></div></div><div class="cards"><a class="card" href="/protect-pdf/" data-id="prt" data-g="protect"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 11h14v10H5z M7 11V8a5 5 0 0 1 10 0v3 M12 15v2"/></svg></span><span><b>Protect PDF</b><small>Add a password (AES-256).</small></span></a><a class="card" href="/unlock-pdf/" data-id="unl" data-g="protect"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 11h14v10H5z M7 11V8a5 5 0 0 1 9.6-2 M12 15v2"/></svg></span><span><b>Unlock PDF</b><small>Remove the password from a PDF you own.</small></span></a></div></section>
+<div class="empty" id="noresult" hidden><b>No tool matches that.</b><br>Try “merge”, “Word”, “compress” or “password”.</div>
+</div>
 
-<section id="about">
+<section class="sec" id="about">
 <h2>Why EasyPDF</h2>
 <p class="lead">Simple PDF tools that respect your files.</p>
 <div class="cards3">
@@ -62,20 +94,21 @@
 </div>
 </section>
 
-<section id="faq">
+<section class="sec" id="faq">
 <h2>Questions</h2>
-<details><summary>Is it safe to upload my files?</summary><p>Files are sent over an encrypted connection and processed only to make your result. They are deleted right after the conversion, and any leftover is removed within minutes. Read the <a href="privacy.html">privacy page</a> for details.</p></details>
-<details><summary>Which tools work without uploading?</summary><p>Images to PDF, Merge PDF, Extract pages and Rotate PDF run entirely in your browser. The tools marked “Secure server” need an upload.</p></details>
+<details><summary>Is it safe to upload my files?</summary><p>Files are sent over an encrypted connection and processed only to make your result. They are deleted right after the conversion, and any leftover is removed within minutes. Read the <a href="/privacy.html">privacy page</a> for details.</p></details>
+<details><summary>Which tools work without uploading?</summary><p>Images to PDF, Merge PDF, Extract pages and Rotate PDF run entirely in your browser. The other tools need an upload.</p></details>
 <details><summary>What is the file size limit?</summary><p>Tools that use the server accept files up to 25 MB. For bigger files, compress them first or split them with Extract pages.</p></details>
 <details><summary>Can EasyPDF recover a forgotten password?</summary><p>No. Unlock PDF only removes a password you already know.</p></details>
 <details><summary>My scanned PDF gives no text in Word. What now?</summary><p>Run OCR PDF first to make the text selectable, then convert the result to Word.</p></details>
 </section>
 </main>
-<footer><div class="wrap">© 2026 EasyPDF · <a href="privacy.html">Privacy</a> · <a href="mailto:contact@easypdf.co.in">Contact</a><br>Browser tools run on your device; server tools delete files right after conversion.</div></footer>
-
+<footer><div class="wrap">© 2026 EasyPDF · <a href="/">Home</a> · <a href="/privacy.html">Privacy</a> · <a href="mailto:contact@easypdf.co.in">Contact</a><br>Browser tools run on your device; server tools delete files right after conversion.</div></footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
-<script src="/assets/config.js?v=1"></script>
-<script src="/assets/easypdf.js?v=1"></script>
-<script src="pwa.js" defer></script>
+<script src="/assets/icons.js?v=3"></script>
+<script src="/assets/tools.js?v=3"></script>
+<script src="/assets/config.js?v=3"></script>
+<script src="/assets/easypdf.js?v=3"></script>
+<script src="/pwa.js" defer></script>
 </body>
 </html>

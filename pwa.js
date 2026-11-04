@@ -41,22 +41,8 @@
   window.addEventListener("online", net); window.addEventListener("offline", net);
   document.addEventListener("DOMContentLoaded", net);
 
-  // Load files into the right tool (uses T, open and setF from index.html)
-  function useFiles(list) {
-    if (!list.length || typeof T === "undefined") return;
-    var imgs = list.every(function (f) { return /^image\//.test(f.type); });
-    var t = T.find(function (x) { return x.id === (imgs ? "img" : "merge"); });
-    if (t) { open(t); setF(list); }
-  }
-
-  // Shortcuts such as index.html#merge
-  function fromHash() {
-    var id = location.hash.slice(1);
-    if (!id || typeof T === "undefined") return;
-    var t = T.find(function (x) { return x.id === id; });
-    if (t) open(t);
-  }
-  window.addEventListener("hashchange", fromHash);
+  // Hand files opened with the app, or shared to it, to the EasyPDF engine
+  function useFiles(list) { if (window.EasyPDF && list.length) window.EasyPDF.useFiles(list); }
 
   // Files opened with the installed app (Chrome desktop file handler)
   if ("launchQueue" in window) {
@@ -85,5 +71,5 @@
     }).catch(function () {});
   }
 
-  window.addEventListener("load", function () { fromHash(); fromShare(); });
+  window.addEventListener("load", fromShare);
 })();

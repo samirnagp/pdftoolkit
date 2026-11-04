@@ -1,8 +1,8 @@
 /* EasyPDF service worker: offline shell, share target, push/sync hooks */
-const CACHE = "easypdf-v2";
+const CACHE = "easypdf-v3";
 const SHARE = "pdfkit-share";
 const SHELL = [
-  "./", "./index.html", "./offline.html", "./privacy.html", "./manifest.webmanifest", "./pwa.js", "./assets/easypdf.css", "./assets/easypdf.js", "./assets/config.js",
+  "./", "./index.html", "./offline.html", "./privacy.html", "./manifest.webmanifest", "./pwa.js", "./assets/easypdf.css", "./assets/easypdf.js", "./assets/config.js", "./assets/icons.js", "./assets/tools.js",
   "./icons/icon-192.png", "./icons/icon-512.png", "./icons/maskable-512.png"
 ];
 

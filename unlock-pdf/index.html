@@ -19,7 +19,7 @@
 <link rel="icon" type="image/png" href="/icons/icon-96.png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebApplication", "name": "EasyPDF Unlock PDF", "url": "https://easypdf.co.in/unlock-pdf/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "description": "Remove the password from a PDF you own. Enter the current password and download an unlocked copy. Free, with no sign-up.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "INR"}}, {"@type": "HowTo", "name": "Unlock a PDF", "step": [{"@type": "HowToStep", "position": 1, "name": "Choose your protected PDF file."}, {"@type": "HowToStep", "position": 2, "name": "Type its current password (leave it empty if the file opens without one)."}, {"@type": "HowToStep", "position": 3, "name": "Click Convert and download the unlocked PDF."}]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can you unlock a PDF if I forgot the password?", "acceptedAnswer": {"@type": "Answer", "text": "No. EasyPDF only removes a password you already know."}}, {"@type": "Question", "name": "Why does it say the password is incorrect?", "acceptedAnswer": {"@type": "Answer", "text": "Check the capital letters and spaces. Passwords are case-sensitive."}}, {"@type": "Question", "name": "Can I protect the file again later?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Use Protect PDF."}}]}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "EasyPDF", "item": "https://easypdf.co.in/"}, {"@type": "ListItem", "position": 2, "name": "Unlock PDF", "item": "https://easypdf.co.in/unlock-pdf/"}]}]}</script>
-<link rel="stylesheet" href="/assets/easypdf.css?v=3">
+<link rel="stylesheet" href="/assets/easypdf.css?v=4">
 </head>
 <body>
 <header class="top"><div class="wrap"><nav>
@@ -48,6 +48,7 @@
 </div>
 <div class="res ok" id="ok" hidden role="status">
 <div class="mark"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg></div><h3>Your file is ready</h3><p class="fn" id="okfn"></p><p class="note" id="oknote"></p>
+<div class="pdf-preview-wrap" id="pdfpreviewwrap"><h4>Preview your PDF</h4><iframe id="pdfpreview" title="PDF result preview" hidden loading="lazy"></iframe></div>
 <div class="actions"><a class="btn lg" id="dl" href="#"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12 M7 11l5 5 5-5 M4 20h16"/></svg><span>Download</span></a><button class="btn ghost lg" id="again" type="button">Convert another file</button></div>
 </div>
 <div class="res err" id="err" hidden role="alert">
@@ -67,8 +68,8 @@
 <script>window.EASYPDF_TOOL="unl";</script>
 <script src="/assets/icons.js?v=3"></script>
 <script src="/assets/tools.js?v=3"></script>
-<script src="/assets/config.js?v=3"></script>
-<script src="/assets/easypdf.js?v=3"></script>
+<script src="/assets/config.js?v=4"></script>
+<script src="/assets/easypdf.js?v=4"></script>
 <script src="/pwa.js" defer></script>
 </body>
 </html>

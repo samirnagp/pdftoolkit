@@ -19,7 +19,7 @@
 <link rel="icon" type="image/png" href="/icons/icon-96.png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebApplication", "name": "EasyPDF OCR PDF", "url": "https://easypdf.co.in/ocr-pdf/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "description": "Turn scanned PDFs into searchable, selectable text with OCR. English and Hindi supported. Free, no sign-up.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "INR"}}, {"@type": "HowTo", "name": "OCR PDF: Make Scans Searchable", "step": [{"@type": "HowToStep", "position": 1, "name": "Choose your scanned PDF."}, {"@type": "HowToStep", "position": 2, "name": "Select the language: English, Hindi, or both."}, {"@type": "HowToStep", "position": 3, "name": "Click Convert and download the searchable PDF."}]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How do I know if my PDF is scanned?", "acceptedAnswer": {"@type": "Answer", "text": "Try selecting text with your mouse. If you can’t, it is probably a scan."}}, {"@type": "Question", "name": "Will the file look different afterwards?", "acceptedAnswer": {"@type": "Answer", "text": "No. The pages look the same, with an invisible text layer added."}}, {"@type": "Question", "name": "How accurate is OCR?", "acceptedAnswer": {"@type": "Answer", "text": "It depends on the scan. Clean, well-lit, straight pages work best. Always check important text."}}]}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "EasyPDF", "item": "https://easypdf.co.in/"}, {"@type": "ListItem", "position": 2, "name": "OCR PDF", "item": "https://easypdf.co.in/ocr-pdf/"}]}]}</script>
-<link rel="stylesheet" href="/assets/easypdf.css?v=3">
+<link rel="stylesheet" href="/assets/easypdf.css?v=4">
 </head>
 <body>
 <header class="top"><div class="wrap"><nav>
@@ -48,6 +48,7 @@
 </div>
 <div class="res ok" id="ok" hidden role="status">
 <div class="mark"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg></div><h3>Your file is ready</h3><p class="fn" id="okfn"></p><p class="note" id="oknote"></p>
+<div class="pdf-preview-wrap" id="pdfpreviewwrap"><h4>Preview your PDF</h4><iframe id="pdfpreview" title="PDF result preview" hidden loading="lazy"></iframe></div>
 <div class="actions"><a class="btn lg" id="dl" href="#"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12 M7 11l5 5 5-5 M4 20h16"/></svg><span>Download</span></a><button class="btn ghost lg" id="again" type="button">Convert another file</button></div>
 </div>
 <div class="res err" id="err" hidden role="alert">
@@ -67,8 +68,8 @@
 <script>window.EASYPDF_TOOL="ocr";</script>
 <script src="/assets/icons.js?v=3"></script>
 <script src="/assets/tools.js?v=3"></script>
-<script src="/assets/config.js?v=3"></script>
-<script src="/assets/easypdf.js?v=3"></script>
+<script src="/assets/config.js?v=4"></script>
+<script src="/assets/easypdf.js?v=4"></script>
 <script src="/pwa.js" defer></script>
 </body>
 </html>

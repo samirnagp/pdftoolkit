@@ -22,7 +22,7 @@
   /* ---------- what each tool needs ---------- */
   const S = (id, name, label, choices, def) => ({ id, name, label, type: 'select', choices, def });
   const B = {
-    p2w: { srv: 'pdf-to-word', ext: PDF },
+    p2w: { srv: 'pdf-to-word', ext: PDF, opts: [S('wm', 'mode', 'Conversion mode', [['auto', 'Auto (recommended)'], ['fast', 'Fast (plain text PDFs)'], ['accurate', 'Best layout (slower, keeps design)'], ['images', 'Page pictures (scanned PDFs, not editable)']], 'auto')] },
     w2p: { srv: 'word-to-pdf', ext: ['doc', 'docx', 'odt', 'rtf'] },
     p2j: { srv: 'pdf-to-jpg', ext: PDF, opts: [S('dpi', 'dpi', 'Image quality', [['100', 'Small files (100 dpi)'], ['150', 'Standard (150 dpi)'], ['200', 'Sharp (200 dpi)'], ['300', 'Print quality (300 dpi)']], '150')] },
     x2p: { srv: 'excel-to-pdf', ext: ['xls', 'xlsx', 'ods', 'csv'] },
@@ -188,13 +188,6 @@
     if (url) URL.revokeObjectURL(url);
     url = URL.createObjectURL(blob);
     const dl = $('dl'); dl.href = url; dl.download = name;
-    const preview = $('pdfpreview');
-    if (preview) {
-      const isPdf = blob.type === 'application/pdf' || /\.pdf$/i.test(name);
-      preview.hidden = !isPdf;
-      if (isPdf) preview.src = url + '#toolbar=1&navpanes=0';
-      else preview.removeAttribute('src');
-    }
     $('okfn').textContent = name + ' · ' + fmt(blob.size);
     $('oknote').textContent = note || '';
     show('done'); dl.focus();
@@ -218,9 +211,6 @@
   /* ---------- running a tool ---------- */
   function run() {
     if (!cur || !files.length) return;
-    if (cur.id === 'unl') {
-      return fail({ title: 'Unlock PDF is not connected yet', msg: 'The current backend OpenAPI specification does not include an unlock endpoint. Your file has not been uploaded.', hint: 'The backend needs POST /api/unlock with file and password fields before this tool can be enabled.', mode: 'none' });
-    }
     const oe = optionError();
     if (oe) { setFerr(esc(oe.msg)); $(oe.id).focus(); return; }
     setFerr('');
@@ -387,24 +377,4 @@
     open: (id, list) => openTool(id, list),
     useFiles: list => { if (PAGE_TOOL || (cur && !work.hidden)) { if (!cur) openTool(PAGE_TOOL, null, true); addFiles(list); } else if (hdrop) startFiles(list); },
   };
-
-  /* Optional measurement/ads integrations. IDs are deliberately blank by default. */
-  function loadOptionalIntegrations() {
-    if (typeof GA_MEASUREMENT_ID !== 'undefined' && /^G-[A-Z0-9]+$/.test(GA_MEASUREMENT_ID)) {
-      window.dataLayer = window.dataLayer || [];
-      window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
-      window.gtag('js', new Date());
-      window.gtag('config', GA_MEASUREMENT_ID, { anonymize_ip: true });
-      const ga = document.createElement('script'); ga.async = true;
-      ga.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(GA_MEASUREMENT_ID);
-      document.head.appendChild(ga);
-    }
-    if (typeof ADSENSE_CLIENT_ID !== 'undefined' && /^ca-pub-[0-9]+$/.test(ADSENSE_CLIENT_ID)) {
-      const ads = document.createElement('script'); ads.async = true;
-      ads.crossOrigin = 'anonymous';
-      ads.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + encodeURIComponent(ADSENSE_CLIENT_ID);
-      document.head.appendChild(ads);
-    }
-  }
-  loadOptionalIntegrations();
 })();

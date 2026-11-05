@@ -24,7 +24,7 @@
 <body>
 <header class="top"><div class="wrap"><nav>
 <a class="logo" href="/">Easy<b>PDF</b></a>
-<a class="l" href="/#tools">Tools</a><a class="l" href="/#about">About</a><a class="l keep" href="/privacy.html">Privacy</a>
+<a class="l keep" href="/#tools">Tools</a><a class="l" href="/#about">About</a><a class="l keep" href="/privacy.html">Privacy</a>
 </nav></div></header>
 <main class="wrap">
 <div class="hero">
@@ -35,7 +35,7 @@
 
 <section class="start" id="start" aria-label="Upload a file">
 <div class="dz big" id="hdrop" tabindex="0" role="button" aria-label="Drop a file here, or press Enter to choose one">
-<span class="up"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4 M7 9l5-5 5 5 M4 20h16"/></svg></span><p class="t">Drop your file here</p><p class="s">PDF, Word, Excel, PowerPoint, JPG or PNG · up to 25 MB</p><button class="btn lg" id="hpick" type="button"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4 M7 9l5-5 5 5 M4 20h16"/></svg><span>Choose file</span></button>
+<span class="up"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4 M7 9l5-5 5 5 M4 20h16"/></svg></span><p class="t" id="hdt">Drop your file here</p><p class="s">PDF, Word, Excel, PowerPoint, JPG or PNG · up to 25 MB</p><button class="btn lg" id="hpick" type="button"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4 M7 9l5-5 5 5 M4 20h16"/></svg><span>Choose file</span></button>
 </div>
 <input type="file" id="hinp" hidden multiple accept=".pdf,.doc,.docx,.odt,.rtf,.xls,.xlsx,.ods,.csv,.ppt,.pptx,.odp,.jpg,.jpeg,.png">
 <p class="msg" id="herr" hidden role="alert"></p>
@@ -105,7 +105,6 @@
 </section>
 </main>
 <footer><div class="wrap">© 2026 EasyPDF · <a href="/">Home</a> · <a href="/privacy.html">Privacy</a> · <a href="mailto:contact@easypdf.co.in">Contact</a><br>Browser tools run on your device; server tools delete files right after conversion.</div></footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script src="/assets/icons.js?v=3"></script>
 <script src="/assets/tools.js?v=3"></script>
 <script src="/assets/config.js?v=4"></script>

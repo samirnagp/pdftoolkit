@@ -19,13 +19,11 @@
     return b;
   }
 
-  // Install button
+  // Install button: appears in the header menu (never floats over the tool buttons)
   var deferred = null;
   var btn = document.createElement("button");
-  btn.textContent = "Install app";
-  btn.hidden = true;
-  btn.style.cssText = "position:fixed;z-index:50;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));padding:11px 18px;border:0;border-radius:99px;background:var(--ac,#d9480f);color:var(--acx,#fff);font:600 14px system-ui,sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25)";
-  document.addEventListener("DOMContentLoaded", function () { document.body.appendChild(btn); });
+  btn.className = "inst"; btn.type = "button"; btn.textContent = "Install app"; btn.hidden = true;
+  document.addEventListener("DOMContentLoaded", function () { var nav = document.querySelector("header nav"); if (nav) nav.appendChild(btn); });
   window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); deferred = e; btn.hidden = false; });
   btn.onclick = function () { if (!deferred) return; deferred.prompt(); deferred.userChoice.finally(function () { deferred = null; btn.hidden = true; }); };
   window.addEventListener("appinstalled", function () { btn.hidden = true; });

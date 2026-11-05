@@ -77,7 +77,11 @@ def svg(name):
 # ---------- shared pieces ----------
 HEADER = f'''<header class="top"><div class="wrap"><nav>
 <a class="logo" href="/">Easy<b>PDF</b></a>
+<<<<<<< Updated upstream
 <a class="l" href="/#tools">Tools</a><a class="l" href="/#about">About</a><a class="l keep" href="/privacy.html">Privacy</a>
+=======
+<a class="l keep" href="/#tools">Tools</a><a class="l" href="/#about">About</a><a class="l keep" href="/privacy.html">Privacy</a>
+>>>>>>> Stashed changes
 </nav></div></header>'''
 FOOTER = f'''<footer><div class="wrap">© 2026 EasyPDF · <a href="/">Home</a> · <a href="/privacy.html">Privacy</a> · <a href="mailto:{CONTACT}">Contact</a><br>Browser tools run on your device; server tools delete files right after conversion.</div></footer>'''
 SCRIPTS = '''<script src="/assets/icons.js?v=3"></script>
@@ -85,7 +89,10 @@ SCRIPTS = '''<script src="/assets/icons.js?v=3"></script>
 <script src="/assets/config.js?v=3"></script>
 <script src="/assets/easypdf.js?v=3"></script>
 <script src="/pwa.js" defer></script>'''
+<<<<<<< Updated upstream
 PDFLIB = '<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>\n'
+=======
+>>>>>>> Stashed changes
 
 
 def head(title, desc, url, ld):
@@ -175,7 +182,11 @@ def tool_page(t):
     notes = "".join(f"<li>{e(n)}</li>" for n in t["notes"])
     faq = "".join(f"<details><summary>{e(q)}</summary><p>{e(a)}</p></details>" for q, a in t["faq"])
     ad = AD if ADS else ""
+<<<<<<< Updated upstream
     return head(t["title"], t["desc"], url, tool_ld(t, url)) + f'''{HEADER}
+=======
+    return head(t["title"], t["desc"], url, tool_ld(t, url)).replace("<body>", '<body class="tp">', 1) + f'''{HEADER}
+>>>>>>> Stashed changes
 <main class="wrap">
 <p class="crumb"><a href="/">Home</a> › {e(t["name"])}</p>
 <div class="hero t"><span class="badge">{badge}</span><h1>{e(t["h1"])}</h1><p>{e(t["intro"])}</p></div>
@@ -188,7 +199,11 @@ def tool_page(t):
 <section class="sec"><h2>More PDF tools</h2><div class="rel">{related}</div></section>
 </main>
 {FOOTER}
+<<<<<<< Updated upstream
 {PDFLIB}<script>window.EASYPDF_TOOL="{t["id"]}";</script>
+=======
+<script>window.EASYPDF_TOOL="{t["id"]}";</script>
+>>>>>>> Stashed changes
 {SCRIPTS}
 </body>
 </html>
@@ -224,7 +239,11 @@ def home_page():
 
 <section class="start" id="start" aria-label="Upload a file">
 <div class="dz big" id="hdrop" tabindex="0" role="button" aria-label="Drop a file here, or press Enter to choose one">
+<<<<<<< Updated upstream
 <span class="up">{svg("upload")}</span><p class="t">Drop your file here</p><p class="s">PDF, Word, Excel, PowerPoint, JPG or PNG · up to 25 MB</p><button class="btn lg" id="hpick" type="button">{svg("upload")}<span>Choose file</span></button>
+=======
+<span class="up">{svg("upload")}</span><p class="t" id="hdt">Drop your file here</p><p class="s">PDF, Word, Excel, PowerPoint, JPG or PNG · up to 25 MB</p><button class="btn lg" id="hpick" type="button">{svg("upload")}<span>Choose file</span></button>
+>>>>>>> Stashed changes
 </div>
 <input type="file" id="hinp" hidden multiple accept=".pdf,.doc,.docx,.odt,.rtf,.xls,.xlsx,.ods,.csv,.ppt,.pptx,.odp,.jpg,.jpeg,.png">
 <p class="msg" id="herr" hidden role="alert"></p>
@@ -263,7 +282,11 @@ def home_page():
 </section>
 </main>
 {FOOTER}
+<<<<<<< Updated upstream
 {PDFLIB}{SCRIPTS}
+=======
+{SCRIPTS}
+>>>>>>> Stashed changes
 </body>
 </html>
 '''

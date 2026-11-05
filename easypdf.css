@@ -160,3 +160,9 @@ details p{color:var(--mu);margin:0;padding:0 var(--s4) var(--s4)}
 footer{margin-top:var(--s8);border-top:1px solid var(--bd);padding:var(--s5) 0 var(--s6);color:var(--mu);font-size:15px;text-align:center}
 footer a{color:var(--ac);display:inline-block;padding:var(--s2)}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* PDF result preview */
+.pdf-preview-wrap { margin: 1.25rem 0; text-align: left; }
+.pdf-preview-wrap h4 { margin: 0 0 .65rem; }
+#pdfpreview { display: block; width: 100%; height: min(72vh, 680px); min-height: 360px; border: 1px solid var(--line, #ddd); border-radius: 12px; background: #f4f5f7; }
+#pdfpreview[hidden] { display: none; }

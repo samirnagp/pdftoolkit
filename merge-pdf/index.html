@@ -19,7 +19,7 @@
 <link rel="icon" type="image/png" href="/icons/icon-96.png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebApplication", "name": "EasyPDF Merge PDF", "url": "https://easypdf.co.in/merge-pdf/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "description": "Merge several PDF files into one in your browser. Free, fast and private: your files are not uploaded.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "INR"}}, {"@type": "HowTo", "name": "Merge PDF Files", "step": [{"@type": "HowToStep", "position": 1, "name": "Choose two or more PDF files."}, {"@type": "HowToStep", "position": 2, "name": "Check the order in the list."}, {"@type": "HowToStep", "position": 3, "name": "Click Convert and download the merged PDF."}]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can I change the order of the files?", "acceptedAnswer": {"@type": "Answer", "text": "Rename the files so their names sort in the order you want, then choose them again."}}, {"@type": "Question", "name": "Is there a limit on file size?", "acceptedAnswer": {"@type": "Answer", "text": "No fixed limit. Very large files depend on your device’s memory."}}, {"@type": "Question", "name": "Are my files uploaded?", "acceptedAnswer": {"@type": "Answer", "text": "No. Merging runs entirely in your browser."}}]}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "EasyPDF", "item": "https://easypdf.co.in/"}, {"@type": "ListItem", "position": 2, "name": "Merge PDF", "item": "https://easypdf.co.in/merge-pdf/"}]}]}</script>
-<link rel="stylesheet" href="/assets/easypdf.css?v=3">
+<link rel="stylesheet" href="/assets/easypdf.css?v=4">
 </head>
 <body>
 <header class="top"><div class="wrap"><nav>
@@ -48,6 +48,7 @@
 </div>
 <div class="res ok" id="ok" hidden role="status">
 <div class="mark"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg></div><h3>Your file is ready</h3><p class="fn" id="okfn"></p><p class="note" id="oknote"></p>
+<div class="pdf-preview-wrap" id="pdfpreviewwrap"><h4>Preview your PDF</h4><iframe id="pdfpreview" title="PDF result preview" hidden loading="lazy"></iframe></div>
 <div class="actions"><a class="btn lg" id="dl" href="#"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12 M7 11l5 5 5-5 M4 20h16"/></svg><span>Download</span></a><button class="btn ghost lg" id="again" type="button">Convert another file</button></div>
 </div>
 <div class="res err" id="err" hidden role="alert">
@@ -67,8 +68,8 @@
 <script>window.EASYPDF_TOOL="merge";</script>
 <script src="/assets/icons.js?v=3"></script>
 <script src="/assets/tools.js?v=3"></script>
-<script src="/assets/config.js?v=3"></script>
-<script src="/assets/easypdf.js?v=3"></script>
+<script src="/assets/config.js?v=4"></script>
+<script src="/assets/easypdf.js?v=4"></script>
 <script src="/pwa.js" defer></script>
 </body>
 </html>

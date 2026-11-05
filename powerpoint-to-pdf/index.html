@@ -19,7 +19,7 @@
 <link rel="icon" type="image/png" href="/icons/icon-96.png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebApplication", "name": "EasyPDF PowerPoint to PDF", "url": "https://easypdf.co.in/powerpoint-to-pdf/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "description": "Convert PowerPoint presentations (PPT, PPTX, ODP) to PDF online for free. No sign-up, and files are deleted right after conversion.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "INR"}}, {"@type": "HowTo", "name": "Convert PowerPoint to PDF", "step": [{"@type": "HowToStep", "position": 1, "name": "Choose your presentation (.ppt, .pptx or .odp)."}, {"@type": "HowToStep", "position": 2, "name": "Click Convert."}, {"@type": "HowToStep", "position": 3, "name": "Download your PDF."}]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Are speaker notes included?", "acceptedAnswer": {"@type": "Answer", "text": "No. The PDF contains the slides only."}}, {"@type": "Question", "name": "Why does a slide look slightly different?", "acceptedAnswer": {"@type": "Answer", "text": "Fonts or special effects that are not available on our server are replaced with similar ones."}}, {"@type": "Question", "name": "Can I make the PDF smaller?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Use Compress PDF on the result."}}]}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "EasyPDF", "item": "https://easypdf.co.in/"}, {"@type": "ListItem", "position": 2, "name": "PowerPoint to PDF", "item": "https://easypdf.co.in/powerpoint-to-pdf/"}]}]}</script>
-<link rel="stylesheet" href="/assets/easypdf.css?v=3">
+<link rel="stylesheet" href="/assets/easypdf.css?v=4">
 </head>
 <body>
 <header class="top"><div class="wrap"><nav>
@@ -48,6 +48,7 @@
 </div>
 <div class="res ok" id="ok" hidden role="status">
 <div class="mark"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg></div><h3>Your file is ready</h3><p class="fn" id="okfn"></p><p class="note" id="oknote"></p>
+<div class="pdf-preview-wrap" id="pdfpreviewwrap"><h4>Preview your PDF</h4><iframe id="pdfpreview" title="PDF result preview" hidden loading="lazy"></iframe></div>
 <div class="actions"><a class="btn lg" id="dl" href="#"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12 M7 11l5 5 5-5 M4 20h16"/></svg><span>Download</span></a><button class="btn ghost lg" id="again" type="button">Convert another file</button></div>
 </div>
 <div class="res err" id="err" hidden role="alert">
@@ -67,8 +68,8 @@
 <script>window.EASYPDF_TOOL="s2p";</script>
 <script src="/assets/icons.js?v=3"></script>
 <script src="/assets/tools.js?v=3"></script>
-<script src="/assets/config.js?v=3"></script>
-<script src="/assets/easypdf.js?v=3"></script>
+<script src="/assets/config.js?v=4"></script>
+<script src="/assets/easypdf.js?v=4"></script>
 <script src="/pwa.js" defer></script>
 </body>
 </html>

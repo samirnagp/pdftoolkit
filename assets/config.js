@@ -1,7 +1,8 @@
-// EasyPDF settings: the only file you normally need to edit.
-// Backend address. After api.easypdf.co.in works, change this to "https://api.easypdf.co.in"
-const API="https://pdfkit-backend-gi27.onrender.com";
-// Optional: must equal API_KEY on the backend. It is visible in the page source, so it is not a secret.
-const API_KEY="";
-// Largest file the tools accept (MB). Keep it equal to MAX_UPLOAD_MB on the backend.
-const MAX_MB=25;
+// EasyPDF public frontend configuration. Never put private API secrets here.
+const API = "https://api.easypdf.co.in";
+// Only populate API_KEY if your backend intentionally uses a browser-visible public key.
+const API_KEY = "";
+const MAX_MB = 25;
+// Optional integrations: leave blank until the properties are verified/approved.
+const GA_MEASUREMENT_ID = ""; // Example: G-XXXXXXXXXX
+const ADSENSE_CLIENT_ID = ""; // Example: ca-pub-XXXXXXXXXXXXXXXX

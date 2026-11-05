@@ -14,15 +14,11 @@
   const stem = n => String(n).replace(/\.[^.]+$/, '');
   const mmss = s => Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
   const PDF = ['pdf'];
-  const COARSE = !!(window.matchMedia && matchMedia('(pointer:coarse)').matches);   // phones and tablets: no drag and drop
-  const PDFLIB_URL = 'https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js';
-  let libPromise = null;
-  const loadPdfLib = () => window.PDFLib ? Promise.resolve() : (libPromise = libPromise || new Promise((res, rej) => { const s = document.createElement('script'); s.src = PDFLIB_URL; s.onload = res; s.onerror = () => { libPromise = null; rej(new Error('lib')); }; document.head.appendChild(s); }));
 
   /* ---------- what each tool needs ---------- */
   const S = (id, name, label, choices, def) => ({ id, name, label, type: 'select', choices, def });
   const B = {
-    p2w: { srv: 'pdf-to-word', ext: PDF, opts: [S('wm', 'mode', 'Conversion mode', [['auto', 'Auto (recommended)'], ['fast', 'Fast (plain text PDFs)'], ['accurate', 'Best layout (slower, keeps design)'], ['images', 'Page pictures (scanned PDFs, not editable)']], 'auto')] },
+    p2w: { srv: 'pdf-to-word', ext: PDF },
     w2p: { srv: 'word-to-pdf', ext: ['doc', 'docx', 'odt', 'rtf'] },
     p2j: { srv: 'pdf-to-jpg', ext: PDF, opts: [S('dpi', 'dpi', 'Image quality', [['100', 'Small files (100 dpi)'], ['150', 'Standard (150 dpi)'], ['200', 'Sharp (200 dpi)'], ['300', 'Print quality (300 dpi)']], '150')] },
     x2p: { srv: 'excel-to-pdf', ext: ['xls', 'xlsx', 'ods', 'csv'] },
@@ -134,13 +130,12 @@
     const t = byId[id]; if (!t || !work) return;
     cancelRun(true);
     cur = t; files = [];
-    if (!t.srv) loadPdfLib().catch(() => { });   // browser tools: fetch the PDF library quietly while the visitor picks files
     if (!PAGE_TOOL) document.title = t.name + ' – EasyPDF';
     $('wic').dataset.g = t.g; $('wic').innerHTML = svg(t.ic);
     $('wt').textContent = t.name; $('wd').textContent = t.short; $('gol').textContent = t.cta || 'Convert';
     $('inp').accept = t.ext.map(e => '.' + e).join(',');
     $('inp').multiple = !!t.multi;
-    $('dzt').textContent = COARSE ? (t.multi ? 'Choose your files' : 'Choose your file') : (t.multi ? 'Drop your files here' : 'Drop your file here');
+    $('dzt').textContent = t.multi ? 'Drop your files here' : 'Drop your file here';
     $('dzh').textContent = typesText(t) + ' · up to ' + MAXMB + ' MB' + (t.srv ? '' : ' · stays on your device');
     $('pick').lastChild.textContent = t.multi ? 'Choose files' : 'Choose file';
     buildOptions(); setFerr('');
@@ -188,6 +183,13 @@
     if (url) URL.revokeObjectURL(url);
     url = URL.createObjectURL(blob);
     const dl = $('dl'); dl.href = url; dl.download = name;
+    const preview = $('pdfpreview');
+    if (preview) {
+      const isPdf = blob.type === 'application/pdf' || /\.pdf$/i.test(name);
+      preview.hidden = !isPdf;
+      if (isPdf) preview.src = url + '#toolbar=1&navpanes=0';
+      else preview.removeAttribute('src');
+    }
     $('okfn').textContent = name + ' · ' + fmt(blob.size);
     $('oknote').textContent = note || '';
     show('done'); dl.focus();
@@ -211,6 +213,9 @@
   /* ---------- running a tool ---------- */
   function run() {
     if (!cur || !files.length) return;
+    if (cur.id === 'unl') {
+      return fail({ title: 'Unlock PDF is not connected yet', msg: 'The current backend OpenAPI specification does not include an unlock endpoint. Your file has not been uploaded.', hint: 'The backend needs POST /api/unlock with file and password fields before this tool can be enabled.', mode: 'none' });
+    }
     const oe = optionError();
     if (oe) { setFerr(esc(oe.msg)); $(oe.id).focus(); return; }
     setFerr('');
@@ -218,10 +223,8 @@
   }
   async function runLocal() {
     const t = cur, my = ++runId;
-    show('working'); $('cancel').hidden = true; setProg('Getting ready…', null, '', true);
-    try { await loadPdfLib(); } catch (e) { return fail({ title: 'A required library didn’t load', msg: 'The PDF tools could not be loaded.', hint: 'Check your internet connection, then try again.', mode: 'rerun' }); }
-    if (my !== runId) return;
-    setProg('Processing in your browser…', null, 'Your files stay on this device.', true);
+    if (!window.PDFLib) return fail({ title: 'A required library didn’t load', msg: 'The PDF library could not be loaded.', hint: 'Check your internet connection and reload the page.', mode: 'rerun' });
+    show('working'); $('cancel').hidden = true; setProg('Processing in your browser…', null, 'Your files stay on this device.', true);
     try {
       await new Promise(r => setTimeout(r, 60));
       const { PDFDocument, degrees } = PDFLib, bytes = f => f.arrayBuffer();
@@ -331,7 +334,6 @@
     box.hidden = false; box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
   if (hdrop) {
-    if (COARSE && $('hdt')) $('hdt').textContent = 'Choose your file';
     wireDrop(hdrop, $('hinp'), $('hpick'), startFiles);
     $('suggest').addEventListener('click', e => {
       const c = e.target.closest('.card[data-id]');
@@ -377,4 +379,24 @@
     open: (id, list) => openTool(id, list),
     useFiles: list => { if (PAGE_TOOL || (cur && !work.hidden)) { if (!cur) openTool(PAGE_TOOL, null, true); addFiles(list); } else if (hdrop) startFiles(list); },
   };
+
+  /* Optional measurement/ads integrations. IDs are deliberately blank by default. */
+  function loadOptionalIntegrations() {
+    if (typeof GA_MEASUREMENT_ID !== 'undefined' && /^G-[A-Z0-9]+$/.test(GA_MEASUREMENT_ID)) {
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+      window.gtag('js', new Date());
+      window.gtag('config', GA_MEASUREMENT_ID, { anonymize_ip: true });
+      const ga = document.createElement('script'); ga.async = true;
+      ga.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(GA_MEASUREMENT_ID);
+      document.head.appendChild(ga);
+    }
+    if (typeof ADSENSE_CLIENT_ID !== 'undefined' && /^ca-pub-[0-9]+$/.test(ADSENSE_CLIENT_ID)) {
+      const ads = document.createElement('script'); ads.async = true;
+      ads.crossOrigin = 'anonymous';
+      ads.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + encodeURIComponent(ADSENSE_CLIENT_ID);
+      document.head.appendChild(ads);
+    }
+  }
+  loadOptionalIntegrations();
 })();

@@ -35,6 +35,10 @@
     merge: { ext: PDF, multi: 1, min: 2 },
     split: { ext: PDF, opts: [{ id: 'rng', label: 'Pages to keep', type: 'text', ph: 'For example 1-3, 5, 8-10', req: 1 }] },
     rot: { ext: PDF, opts: [S('ang', null, 'Rotate by', [['90', '90° clockwise'], ['180', '180°'], ['270', '90° counter-clockwise']], '90')] },
+    scan: { ext: ['jpg', 'jpeg', 'png', 'webp'], multi: 1, cam: 1, opts: [S('look', null, 'Look', [['doc', 'Document (clean, high contrast)'], ['photo', 'Photo (keep colours)']], 'doc'), S('psz', null, 'Page size', [['a4', 'A4 pages'], ['fit', 'Same size as the photo']], 'a4')] },
+    p2x: { srv: 'pdf-to-excel', ext: PDF },
+    rep: { srv: 'repair', ext: PDF },
+    edit: { ext: PDF, editor: 1 },
   };
   const T = (window.TOOLS_META || []).map(m => ({ ...m, ...B[m.id] }));
   const G = window.GROUPS_META || [];
@@ -89,6 +93,51 @@
   }
   window.EasyPDFTest = { parseRanges, suggestFor, describeError, ext, fmt };
 
+  /* ---------- hand a file from the home page to the PDF editor ---------- */
+  const handoffDb = () => new Promise((res, rej) => { const r = indexedDB.open('easypdf-handoff', 1); r.onupgradeneeded = () => r.result.createObjectStore('f'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+  window.EasyHandoff = {
+    put: async f => { const d = await handoffDb(); return new Promise((res, rej) => { const t = d.transaction('f', 'readwrite'); t.objectStore('f').put(f, 'file'); t.oncomplete = () => res(); t.onerror = () => rej(t.error); }); },
+    take: async () => { const d = await handoffDb(); return new Promise((res, rej) => { const t = d.transaction('f', 'readwrite'), s = t.objectStore('f'), g = s.get('file'); g.onsuccess = () => { s.delete('file'); res(g.result || null); }; g.onerror = () => rej(g.error); }); },
+  };
+  async function goEditor(list) {
+    const t = byId.edit;
+    try { if (list && list.length) await window.EasyHandoff.put(list[0]); } catch (e) { }
+    location.href = '/' + t.slug + '/' + (list && list.length ? '#file' : '');
+  }
+
+  /* ---------- scanning: clean up phone photos ---------- */
+  async function loadBitmap(f) {
+    try { return await createImageBitmap(f, { imageOrientation: 'from-image' }); }
+    catch (e) { const u = URL.createObjectURL(f); try { const im = new Image(); im.src = u; await im.decode(); return im; } finally { setTimeout(() => URL.revokeObjectURL(u), 5000); } }
+  }
+  function enhance(ctx, w, h) {                                  // grey, stretch the contrast and whiten the paper
+    const img = ctx.getImageData(0, 0, w, h), d = img.data, hist = new Uint32Array(256);
+    for (let i = 0; i < d.length; i += 4) { const g = (d[i] * 299 + d[i + 1] * 587 + d[i + 2] * 114) / 1000 | 0; d[i] = g; hist[g]++; }
+    const n = w * h; let lo = 0, hi = 255, acc = 0;
+    for (let v = 0; v < 256; v++) { acc += hist[v]; if (acc >= n * 0.02) { lo = v; break; } }
+    acc = 0; for (let v = 255; v >= 0; v--) { acc += hist[v]; if (acc >= n * 0.02) { hi = v; break; } }
+    if (hi - lo < 30) { lo = 0; hi = 255; }
+    const lut = new Uint8ClampedArray(256);
+    for (let v = 0; v < 256; v++) { let x = Math.min(1, Math.max(0, (v - lo) / (hi - lo))); x = x * x * (3 - 2 * x); lut[v] = Math.round(255 * Math.min(1, Math.max(0, (x - 0.08) / 0.84))); }
+    for (let i = 0; i < d.length; i += 4) { const v = lut[d[i]]; d[i] = d[i + 1] = d[i + 2] = v; }
+    ctx.putImageData(img, 0, 0);
+  }
+  async function scanToPdf(list, look, psz) {
+    const { PDFDocument } = PDFLib, out = await PDFDocument.create();
+    for (const f of list) {
+      const bmp = await loadBitmap(f), bw = bmp.width, bh = bmp.height, k = Math.min(1, 2000 / Math.max(bw, bh));
+      const w = Math.round(bw * k), h = Math.round(bh * k), c = document.createElement('canvas'); c.width = w; c.height = h;
+      const x = c.getContext('2d', { willReadFrequently: true }); x.fillStyle = '#fff'; x.fillRect(0, 0, w, h); x.drawImage(bmp, 0, 0, w, h);
+      if (bmp.close) bmp.close();
+      if (look === 'doc') enhance(x, w, h);
+      const blob = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.82)), im = await out.embedJpg(await blob.arrayBuffer());
+      const [pw, ph] = psz === 'a4' ? (w > h ? [842, 595] : [595, 842]) : [w * 0.75, h * 0.75];
+      const s = Math.min(pw / w, ph / h), page = out.addPage([pw, ph]);
+      page.drawImage(im, { x: (pw - w * s) / 2, y: (ph - h * s) / 2, width: w * s, height: h * s });
+    }
+    return out;
+  }
+
   /* ---------- workspace ---------- */
   const work = $('work');
   const show = state => {
@@ -140,10 +189,11 @@
     $('wt').textContent = t.name; $('wd').textContent = t.short; $('gol').textContent = t.cta || 'Convert';
     $('inp').accept = t.ext.map(e => '.' + e).join(',');
     $('inp').multiple = !!t.multi;
-    $('dzt').textContent = COARSE ? (t.multi ? 'Choose your files' : 'Choose your file') : (t.multi ? 'Drop your files here' : 'Drop your file here');
+    $('dzt').textContent = COARSE ? (t.multi ? 'Upload your files' : 'Upload your file') : (t.multi ? 'Drop your files here' : 'Drop your file here');
     $('dzh').textContent = typesText(t) + ' · up to ' + MAXMB + ' MB' + (t.srv ? '' : ' · stays on your device');
     $('pick').lastChild.textContent = t.multi ? 'Choose files' : 'Choose file';
     buildOptions(); setFerr('');
+    if ($('camrow')) $('camrow').hidden = !(t.cam && COARSE);
     work.hidden = false; show('idle'); renderFiles();
     if (list && list.length) addFiles(list);
     if (!quiet) { work.scrollIntoView({ behavior: 'smooth', block: 'start' }); const h = $('wt'); h.tabIndex = -1; setTimeout(() => h.focus({ preventScroll: true }), 300); }
@@ -226,7 +276,10 @@
       await new Promise(r => setTimeout(r, 60));
       const { PDFDocument, degrees } = PDFLib, bytes = f => f.arrayBuffer();
       let out, name;
-      if (t.id === 'img') {
+      if (t.id === 'scan') {
+        out = await scanToPdf(files, $('look').value, $('psz').value);
+        name = files.length === 1 ? stem(files[0].name) + '-scan.pdf' : 'scan.pdf';
+      } else if (t.id === 'img') {
         out = await PDFDocument.create();
         for (const f of files) { const b = await bytes(f); const im = ext(f.name) === 'png' ? await out.embedPng(b) : await out.embedJpg(b); out.addPage([im.width, im.height]).drawImage(im, { x: 0, y: 0, width: im.width, height: im.height }); }
         name = files.length === 1 ? stem(files[0].name) + '.pdf' : 'images.pdf';
@@ -273,8 +326,9 @@
         if (x.status === 200) {
           const m = /filename="?([^";]+)"?/.exec(x.getResponseHeader('Content-Disposition') || '');
           const mode = x.getResponseHeader('X-Word-Mode');
-          const notes = { 'fast-fallback': 'The full-layout converter was too slow or found nothing, so the fast converter was used. Complex designs may look simpler.', 'images-fallback': 'No editable text could be extracted, so each page was placed in the Word file as a picture. For editable text, run OCR PDF first.' };
-          finish(x.response, m ? m[1] : stem(f.name) + '-result', notes[mode] || 'Your original file has been removed from our server.');
+          const xm = x.getResponseHeader('X-Excel-Mode'), rm = x.getResponseHeader('X-Repair-Method');
+          const notes = { 'text-excel': 'No ruled tables were found, so each line of text was split into columns. Please check the result.', 'reprinted-repair': 'The file could not be rebuilt directly, so it was re-printed into a new PDF. Some links or form fields may be lost.', 'fast-fallback': 'The full-layout converter was too slow or found nothing, so the fast converter was used. Complex designs may look simpler.', 'images-fallback': 'No editable text could be extracted, so each page was placed in the Word file as a picture. For editable text, run OCR PDF first.' };
+          finish(x.response, m ? m[1] : stem(f.name) + '-result', notes[mode] || (xm === 'text' ? notes['text-excel'] : '') || (rm === 'reprinted' ? notes['reprinted-repair'] : '') || 'Your original file has been removed from our server.');
         } else {
           let d = ''; try { d = JSON.parse(await x.response.text()).detail || ''; } catch (e) { }
           fail(describeError(x.status, typeof d === 'string' ? d : '', t, files));
@@ -309,6 +363,7 @@
       renderFiles();
     });
     $('go').addEventListener('click', run);
+    if ($('cam')) { $('cam').addEventListener('click', () => $('camin').click()); $('camin').addEventListener('change', () => { if ($('camin').files.length) addFiles($('camin').files); $('camin').value = ''; }); }
     $('cancel').addEventListener('click', () => { cancelRun(); setFerr('Cancelled. Your file was not kept.'); });
     $('again').addEventListener('click', () => { files = []; renderFiles(); setFerr(''); show('idle'); work.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
     $('other').addEventListener('click', () => { files = []; renderFiles(); setFerr(''); show('idle'); $('pick').focus(); });
@@ -331,11 +386,11 @@
     box.hidden = false; box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
   if (hdrop) {
-    if (COARSE && $('hdt')) $('hdt').textContent = 'Choose your file';
+    if (COARSE && $('hdt')) $('hdt').textContent = 'Upload your file';
     wireDrop(hdrop, $('hinp'), $('hpick'), startFiles);
     $('suggest').addEventListener('click', e => {
       const c = e.target.closest('.card[data-id]');
-      if (c) { const id = c.dataset.id; openTool(id, homeFiles); }
+      if (c) { const id = c.dataset.id; if (byId[id].editor) return goEditor(homeFiles); openTool(id, homeFiles); }
       if (e.target.closest('#hchange')) { $('suggest').hidden = true; homeFiles = []; $('hinp').click(); }
     });
   }
@@ -356,14 +411,16 @@
   }
   if (q) {
     q.addEventListener('input', applySearch);
-    q.addEventListener('keydown', e => { if (e.key === 'Enter') { const c = document.querySelector('#groups .card:not([hidden])'); if (c) openTool(c.dataset.id, null); } });
+    q.addEventListener('keydown', e => { if (e.key === 'Enter') { const c = document.querySelector('#groups .card:not([hidden])'); if (c) { if (byId[c.dataset.id].editor) location.href = '/' + byId[c.dataset.id].slug + '/'; else openTool(c.dataset.id, null); } } });
     $('qclear').addEventListener('click', () => { q.value = ''; applySearch(); q.focus(); });
     document.querySelectorAll('.chip[data-q]').forEach(b => b.addEventListener('click', () => { q.value = b.dataset.q; applySearch(); $('groups').scrollIntoView({ behavior: 'smooth' }); }));
   }
   document.addEventListener('click', e => {
     const a = e.target.closest('#groups a.card[data-id]');
     if (a && !e.metaKey && !e.ctrlKey && !e.shiftKey && e.button === 0 && work) {
-      e.preventDefault(); const t = byId[a.dataset.id];
+      const t = byId[a.dataset.id];
+      if (t.editor) { if (homeFiles.length === 1 && t.ext.includes(ext(homeFiles[0].name))) { e.preventDefault(); goEditor(homeFiles); } return; }
+      e.preventDefault();
       const ok = homeFiles.length && homeFiles.every(f => t.ext.includes(ext(f.name))) && (t.multi || homeFiles.length === 1);
       openTool(a.dataset.id, ok ? homeFiles : null);
     }

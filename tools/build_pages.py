@@ -20,7 +20,7 @@ GROUPS = [
     ("convert", "Convert", "Change a file into another format", "swap"),
     ("organize", "Organize", "Merge, split and arrange pages", "layers"),
     ("compress", "Compress", "Make files smaller", "shrink"),
-    ("edit", "Edit", "Rotate pages and read scanned text", "pencil"),
+    ("edit", "Edit", "Edit, repair, rotate and read scanned text", "pencil"),
     ("protect", "Protect", "Add or remove a password", "shield"),
 ]
 # id: (group, icon, call-to-action button text, search words)
@@ -38,6 +38,10 @@ META = {
     "ocr": ("edit", "scan", "Make searchable", "ocr scan scanned text searchable recognize hindi english"),
     "prt": ("protect", "lock", "Protect PDF", "protect password lock encrypt secure"),
     "unl": ("protect", "unlock", "Unlock PDF", "unlock remove password decrypt open restrictions"),
+    "scan": ("convert", "camera", "Create PDF", "scan scanner camera photo document paper pages phone pictures to pdf"),
+    "p2x": ("convert", "filetable", "Convert to Excel", "excel xlsx xls spreadsheet table tables data csv pdf to excel"),
+    "rep": ("edit", "wrench", "Repair PDF", "repair fix corrupt corrupted damaged broken cannot open recover"),
+    "edit": ("edit", "type", "Open editor", "edit editor text sign signature annotate highlight draw whiteout fill form add image delete pages reorder"),
 }
 ICONS = {
     "doc": "M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z M14 3v5h5 M9 13h6 M9 17h6",
@@ -64,6 +68,16 @@ ICONS = {
     "file": "M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z M14 3v5h5",
     "up": "M6 15l6-6 6 6",
     "down": "M6 9l6 6 6-6",
+    "camera": "M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z M12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z",
+    "filetable": "M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z M14 3v5h5 M8 12h8 M8 16h8 M12 10v8",
+    "wrench": "M14.7 6.3a4 4 0 0 0-5.4 5.1L3 17.7V21h3.3l6.3-6.3a4 4 0 0 0 5.1-5.4L15 12l-3-3z",
+    "type": "M5 6V4h14v2 M12 4v16 M9 20h6",
+    "pointer": "M5 3l14 8-6 2-2 6z",
+    "highlighter": "M13.5 5.5l5 5L10 19l-5-5z M4 21h8",
+    "square": "M4 4h16v16H4z",
+    "imgplus": "M14 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-9 M4 17l4.5-4.5 4 4 M18 2v6 M15 5h6",
+    "undo": "M9 14L4 9l5-5 M4 9h10a6 6 0 0 1 0 12h-3",
+    "trash": "M4 7h16 M9 7V4h6v3 M6 7l1 13h10l1-13 M10 11v6 M14 11v6",
 }
 for t in TOOLS:
     t["g"], t["ic"], t["cta"], t["kw"] = META[t["id"]]
@@ -80,10 +94,11 @@ HEADER = f'''<header class="top"><div class="wrap"><nav>
 <a class="l keep" href="/#tools">Tools</a><a class="l" href="/#about">About</a><a class="l keep" href="/privacy.html">Privacy</a>
 </nav></div></header>'''
 FOOTER = f'''<footer><div class="wrap">© 2026 EasyPDF · <a href="/">Home</a> · <a href="/privacy.html">Privacy</a> · <a href="mailto:{CONTACT}">Contact</a><br>Browser tools run on your device; server tools delete files right after conversion.</div></footer>'''
-SCRIPTS = '''<script src="/assets/icons.js?v=3"></script>
-<script src="/assets/tools.js?v=3"></script>
-<script src="/assets/config.js?v=3"></script>
-<script src="/assets/easypdf.js?v=3"></script>
+EDITOR_JS = '<script src="/assets/editor.js?v=4"></script>'
+SCRIPTS = '''<script src="/assets/icons.js?v=4"></script>
+<script src="/assets/tools.js?v=4"></script>
+<script src="/assets/config.js?v=4"></script>
+<script src="/assets/easypdf.js?v=4"></script>
 <script src="/pwa.js" defer></script>'''
 
 
@@ -109,7 +124,7 @@ def head(title, desc, url, ld):
 <link rel="icon" type="image/png" href="/icons/icon-96.png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <script type="application/ld+json">{ld}</script>
-<link rel="stylesheet" href="/assets/easypdf.css?v=3">
+<link rel="stylesheet" href="/assets/easypdf.css?v=4">
 </head>
 <body>
 '''
@@ -120,9 +135,11 @@ def workspace(home):
     return f'''<section class="ws" id="work" data-state="idle" hidden aria-labelledby="wt">
 <div class="ws-head"><span class="ico" id="wic"></span><div><h2 id="wt"></h2><p id="wd"></p></div>{close}</div>
 <div class="dz" id="drop" tabindex="0" role="button" aria-label="Drop files here, or press Enter to choose files">
-<span class="up">{svg("upload")}</span><p class="t" id="dzt">Drop your file here</p><p class="s" id="dzh"></p><button class="btn lg" id="pick" type="button">{svg("upload")}<span>Choose file</span></button>
+<span class="up">{svg("upload")}</span><p class="t" id="dzt">Drop your file here</p><p class="or" aria-hidden="true">or</p><button class="btn lg" id="pick" type="button">{svg("upload")}<span>Choose file</span></button><p class="s" id="dzh"></p>
 </div>
 <input type="file" id="inp" hidden>
+<div class="actions" id="camrow" hidden><button class="btn ghost lg" id="cam" type="button">{svg("camera")}<span>Take photo</span></button></div>
+<input type="file" id="camin" accept="image/*" capture="environment" hidden>
 <p class="msg" id="ferr" hidden role="alert"></p>
 <ul class="files" id="files" aria-label="Selected files"></ul>
 <p class="note" id="fnote" aria-live="polite"></p>
@@ -141,6 +158,34 @@ def workspace(home):
 <div class="res err" id="err" hidden role="alert">
 <div class="mark">{svg("x")}</div><h3 id="errt"></h3><p id="errm"></p><p class="hint" id="errh"></p>
 <div class="actions"><button class="btn lg" id="retry" type="button">Try again</button><button class="btn ghost lg" id="other" type="button">Choose another file</button></div>
+</div>
+</section>'''
+
+
+def editor_ui():
+    sw = "".join(f'<button class="sw" type="button" data-c="{c}" style="--c:{c}" aria-label="Colour {c}" aria-pressed="false"></button>'
+                 for c in ["#111111", "#d9480f", "#1c7ed6", "#2b8a3e", "#e03131", "#fcc419"])
+    tools = [("select", "pointer", "Select"), ("text", "type", "Text"), ("draw", "pencil", "Draw"), ("hl", "highlighter", "Highlight"), ("white", "square", "Cover"), ("img", "imgplus", "Image")]
+    tb = "".join(f'<button class="tb" type="button" data-tool="{k}" aria-pressed="false">{svg(i)}<span>{n}</span></button>' for k, i, n in tools)
+    return f'''<section class="ed" id="ed" aria-label="PDF editor">
+<div class="dz" id="edrop" tabindex="0" role="button" aria-label="Drop a PDF here, or press Enter to choose one">
+<span class="up">{svg("upload")}</span><p class="t" id="edt">Drop your PDF here</p><p class="or" aria-hidden="true">or</p><button class="btn lg" id="edpick" type="button">{svg("upload")}<span>Choose PDF</span></button><p class="s">PDF files up to 100 MB · stays on your device</p>
+</div>
+<input type="file" id="edin" accept=".pdf,application/pdf" hidden>
+<input type="file" id="edimg" accept="image/png,image/jpeg" hidden>
+<p class="msg" id="ederr" hidden role="alert"></p>
+<div class="prog" id="edbusy" hidden aria-live="polite"><div class="prog-top"><span id="edbusyt">Opening your PDF…</span></div><div class="bar ind"><i></i></div></div>
+<div id="edwork" hidden>
+<div class="edbar" role="toolbar" aria-label="Editing tools">
+<div class="tg" role="group" aria-label="Tools">{tb}</div>
+<div class="tg" role="group" aria-label="Colour">{sw}</div>
+<label class="szl"><span class="sr">Size</span><select id="edsz" aria-label="Size"><option value="s">Small</option><option value="m" selected>Medium</option><option value="l">Large</option></select></label>
+<div class="tg"><button class="tb" id="edundo" type="button" disabled>{svg("undo")}<span>Undo</span></button><button class="tb" id="eddel" type="button" disabled>{svg("trash")}<span>Delete</span></button></div>
+</div>
+<p class="note" id="edhelp" aria-live="polite"></p>
+<div id="edpages"></div>
+<div class="actions"><button class="btn lg" id="eddl" type="button">{svg("download")}<span>Download edited PDF</span></button><button class="btn ghost lg" id="ednew" type="button">Open another PDF</button></div>
+<div class="res ok" id="edok" hidden role="status"><div class="mark">{svg("check")}</div><h3>Your edited PDF is ready</h3><p class="fn" id="edokfn"></p><p class="note" id="edoknote"></p><div class="actions"><a class="btn lg" id="eddl2" href="#">{svg("download")}<span>Download again</span></a></div></div>
 </div>
 </section>'''
 
@@ -178,7 +223,7 @@ def tool_page(t):
 <main class="wrap">
 <p class="crumb"><a href="/">Home</a> › {e(t["name"])}</p>
 <div class="hero t"><span class="badge">{badge}</span><h1>{e(t["h1"])}</h1><p>{e(t["intro"])}</p></div>
-{workspace(False)}
+{editor_ui() if t["id"] == "edit" else workspace(False)}
 <section class="sec"><h2>How to use {e(t["name"])}</h2><ol class="steps">{steps}</ol></section>
 <section class="sec"><h2>Why use EasyPDF</h2><div class="cards3" style="margin-top:12px">{cards}</div></section>
 <section class="sec"><h2>Good to know</h2><ul class="notes">{notes}</ul></section>
@@ -189,6 +234,7 @@ def tool_page(t):
 {FOOTER}
 <script>window.EASYPDF_TOOL="{t["id"]}";</script>
 {SCRIPTS}
+{EDITOR_JS if t["id"] == "edit" else ""}
 </body>
 </html>
 '''
@@ -223,7 +269,7 @@ def home_page():
 
 <section class="start" id="start" aria-label="Upload a file">
 <div class="dz big" id="hdrop" tabindex="0" role="button" aria-label="Drop a file here, or press Enter to choose one">
-<span class="up">{svg("upload")}</span><p class="t" id="hdt">Drop your file here</p><p class="s">PDF, Word, Excel, PowerPoint, JPG or PNG · up to 25 MB</p><button class="btn lg" id="hpick" type="button">{svg("upload")}<span>Choose file</span></button>
+<span class="up">{svg("upload")}</span><p class="t" id="hdt">Drop your file here</p><p class="or" aria-hidden="true">or</p><button class="btn lg" id="hpick" type="button">{svg("upload")}<span>Choose file</span></button><p class="s">PDF, Word, Excel, PowerPoint, JPG or PNG · up to 25 MB</p>
 </div>
 <input type="file" id="hinp" hidden multiple accept=".pdf,.doc,.docx,.odt,.rtf,.xls,.xlsx,.ods,.csv,.ppt,.pptx,.odp,.jpg,.jpeg,.png">
 <p class="msg" id="herr" hidden role="alert"></p>
@@ -246,16 +292,16 @@ def home_page():
 <h2>Why EasyPDF</h2>
 <p class="lead">Simple PDF tools that respect your files.</p>
 <div class="cards3">
-<div class="card3"><h3>🔒 Private</h3><p>Merge, split, rotate and images-to-PDF run inside your browser, so those files never leave your device. Other tools upload a file only for the conversion and delete it right after.</p></div>
+<div class="card3"><h3>🔒 Private</h3><p>Merge, extract, rotate, scan, edit and images-to-PDF run inside your browser, so those files never leave your device. Other tools upload a file only for the conversion and delete it right after.</p></div>
 <div class="card3"><h3>⚡ Free and quick</h3><p>No sign-up and no watermarks. Large or complex files can take a little longer to convert.</p></div>
-<div class="card3"><h3>🧰 Everything in one place</h3><p>Convert between PDF and Word, Excel, PowerPoint and JPG. Compress, protect, unlock and OCR your PDFs.</p></div>
+<div class="card3"><h3>🧰 Everything in one place</h3><p>Convert between PDF and Word, Excel, PowerPoint and JPG. Scan, edit, repair, compress, protect, unlock and OCR your PDFs.</p></div>
 </div>
 </section>
 
 <section class="sec" id="faq">
 <h2>Questions</h2>
 <details><summary>Is it safe to upload my files?</summary><p>Files are sent over an encrypted connection and processed only to make your result. They are deleted right after the conversion, and any leftover is removed within minutes. Read the <a href="/privacy.html">privacy page</a> for details.</p></details>
-<details><summary>Which tools work without uploading?</summary><p>Images to PDF, Merge PDF, Extract pages and Rotate PDF run entirely in your browser. The other tools need an upload.</p></details>
+<details><summary>Which tools work without uploading?</summary><p>Images to PDF, Scan to PDF, Merge PDF, Extract pages, Rotate PDF and Edit PDF run entirely in your browser. The other tools need an upload.</p></details>
 <details><summary>What is the file size limit?</summary><p>Tools that use the server accept files up to 25 MB. For bigger files, compress them first or split them with Extract pages.</p></details>
 <details><summary>Can EasyPDF recover a forgotten password?</summary><p>No. Unlock PDF only removes a password you already know.</p></details>
 <details><summary>My scanned PDF gives no text in Word. What now?</summary><p>Run OCR PDF first to make the text selectable, then convert the result to Word.</p></details>

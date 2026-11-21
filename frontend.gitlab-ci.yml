@@ -1,0 +1,16 @@
+# EasyPDF website on GitLab Pages. Save as .gitlab-ci.yml in the repo that holds index.html.
+# Optional CI/CD variables: API_URL (e.g. https://api.easypdf.co.in) and API_KEY.
+# They are written into assets/config.js at build time, so you never edit that file by hand.
+pages:
+  stage: deploy
+  image: alpine:3.20
+  script:
+    - mkdir -p public
+    - 'for f in *; do case "$f" in public|tools) ;; *) cp -r "$f" public/ ;; esac; done'
+    - 'if [ -n "$API_URL" ]; then sed -i "s|^const API=.*;|const API=\"$API_URL\";|" public/assets/config.js; fi'
+    - 'if [ -n "$API_KEY" ]; then sed -i "s|^const API_KEY=.*;|const API_KEY=\"$API_KEY\";|" public/assets/config.js; fi'
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

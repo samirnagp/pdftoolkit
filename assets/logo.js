@@ -1,10 +1,11 @@
 /* Swaps the text "EasyPDF" brand link for the logo on any page. Safe to load more than once. */
 (function(){
   var css=document.createElement('style');
-  css.textContent='a[data-epdf-logo]{display:inline-flex!important;align-items:center;line-height:0!important;font-size:0!important;overflow:hidden;max-height:44px;margin:0!important;padding:0!important}'+
+  css.textContent='a[data-epdf-logo]{display:inline-flex!important;align-items:center;flex:0 0 auto!important;width:auto!important;min-width:0;max-width:none!important;line-height:0!important;font-size:0!important;overflow:visible!important;margin:0!important;padding:0!important}'+
   'a[data-epdf-logo]::before,a[data-epdf-logo]::after{content:none!important;display:none!important}'+
   'a[data-epdf-logo]>*:not(img){display:none!important}'+
-  'a[data-epdf-logo] img{display:block;height:40px;width:auto;max-width:58vw;object-fit:contain;margin:0!important}'+
+  'a[data-epdf-logo] img{display:block;flex:none;height:40px!important;width:auto!important;max-width:none!important;object-fit:contain;margin:0!important}'+
+  '@media(max-width:640px){a[data-epdf-logo] img{height:30px!important}}'+
   '@media(prefers-color-scheme:dark){a[data-epdf-logo] img{background:#fff;border-radius:8px;padding:2px 8px}}';
   document.head.appendChild(css);
   function icons(){

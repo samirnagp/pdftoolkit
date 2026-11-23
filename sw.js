@@ -1,78 +1,110 @@
-/* EasyPDF service worker: offline shell, share target, push/sync hooks */
-const CACHE = "easypdf-v7";
+/* EasyPDF service worker: cache only static app assets, never documents/API. */
+const CACHE = "easypdf-v8";
 const SHARE = "pdfkit-share";
 const SHELL = [
-  "./", "./index.html", "./offline.html", "./privacy.html", "./manifest.webmanifest", "./pwa.js", "./assets/easypdf.css", "./assets/easypdf.js", "./assets/config.js", "./assets/icons.js", "./assets/tools.js", "./assets/site-enhancements.js",
+  "./", "./index.html", "./offline.html", "./privacy.html", "./manifest.webmanifest",
+  "./pwa.js", "./assets/easypdf.css", "./assets/easypdf.js", "./assets/config.js",
+  "./assets/icons.js", "./assets/tools.js", "./assets/site-enhancements.js",
   "./icons/icon-192.png", "./icons/icon-512.png", "./icons/maskable-512.png"
 ];
 
-self.addEventListener("install", e => {
-  // Cache each file separately so one missing file never blocks installation
-  e.waitUntil(
+self.addEventListener("install", event => {
+  event.waitUntil(
     caches.open(CACHE)
-      .then(c => Promise.allSettled(SHELL.map(u => c.add(u))))
+      .then(cache => Promise.allSettled(SHELL.map(path => cache.add(path))))
       .then(() => self.skipWaiting())
   );
 });
 
-self.addEventListener("activate", e => {
-  e.waitUntil(
+self.addEventListener("activate", event => {
+  event.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== CACHE && k !== SHARE).map(k => caches.delete(k))))
+      .then(keys => Promise.all(keys
+        .filter(key => key !== CACHE && key !== SHARE)
+        .map(key => caches.delete(key))))
       .then(() => self.clients.claim())
   );
 });
 
-self.addEventListener("fetch", e => {
-  const r = e.request;
-  const u = new URL(r.url);
+self.addEventListener("fetch", event => {
+  const request = event.request;
+  const url = new URL(request.url);
 
-  // Web Share Target: files shared to the app from other apps
-  if (r.method === "POST" && u.pathname.endsWith("/share-target")) {
-    e.respondWith((async () => {
-      const files = (await r.formData()).getAll("files").filter(f => f && f.name);
-      const c = await caches.open(SHARE);
-      for (const k of await c.keys()) await c.delete(k);
-      let i = 0;
-      for (const f of files) {
-        await c.put(new Request(self.registration.scope + "__shared/" + i++),
-          new Response(f, { headers: { "Content-Type": f.type, "X-Name": encodeURIComponent(f.name) } }));
+  // Preserve the existing PWA Share Target flow for files explicitly shared
+  // by the user. This is separate from ordinary HTTP response caching.
+  if (request.method === "POST" && url.origin === self.location.origin &&
+      url.pathname.endsWith("/share-target")) {
+    event.respondWith((async () => {
+      const files = (await request.formData()).getAll("files")
+        .filter(file => file && file.name);
+      const cache = await caches.open(SHARE);
+      for (const key of await cache.keys()) await cache.delete(key);
+      let index = 0;
+      for (const file of files) {
+        await cache.put(
+          new Request(self.registration.scope + "__shared/" + index++),
+          new Response(file, {
+            headers: {
+              "Content-Type": file.type || "application/octet-stream",
+              "X-Name": encodeURIComponent(file.name)
+            }
+          })
+        );
       }
-      return Response.redirect(new URL("./?shared=" + i, self.registration.scope).href, 303);
+      return Response.redirect(
+        new URL("./?shared=" + index, self.registration.scope).href, 303
+      );
     })());
     return;
   }
 
-  if (r.method !== "GET") return;   // uploads to the backend API are never touched
-  if (u.origin !== location.origin && u.hostname !== "cdnjs.cloudflare.com") return;
+  if (request.method !== "GET" || url.origin !== self.location.origin) return;
 
-  // Network first, cache fallback, offline page for navigations
-  e.respondWith(
-    fetch(r).then(res => {
-      if (res.ok || res.type === "opaque") {
-        const copy = res.clone();
-        caches.open(CACHE).then(c => c.put(r, copy));
+  // Do not intercept navigations, API calls, document fetches, or generic
+  // fetch() requests. Only static scripts, styles, images and fonts qualify.
+  if (!["script", "style", "image", "font"].includes(request.destination)) {
+    if (request.mode === "navigate") {
+      event.respondWith(fetch(request).catch(async () =>
+        (await caches.match("./index.html")) ||
+        (await caches.match("./offline.html")) ||
+        Response.error()
+      ));
+    }
+    return;
+  }
+
+  event.respondWith((async () => {
+    const cache = await caches.open(CACHE);
+    try {
+      const response = await fetch(request);
+      const cacheControl = response.headers.get("Cache-Control") || "";
+      const vary = response.headers.get("Vary") || "";
+      if (response.ok && response.type === "basic" &&
+          !/no-store|private/i.test(cacheControl) && vary.trim() !== "*") {
+        await cache.put(request, response.clone());
       }
-      return res;
-    }).catch(async () => {
-      const hit = await caches.match(r, { ignoreSearch: true });
-      if (hit) return hit;
-      if (r.mode === "navigate") return (await caches.match("./index.html")) || caches.match("./offline.html");
-      return Response.error();
-    })
-  );
+      return response;
+    } catch {
+      return (await cache.match(request)) || Response.error();
+    }
+  })());
 });
 
-/* ---- Optional hooks. They do nothing until you add a push server or register a sync. ---- */
-self.addEventListener("push", e => {
-  const d = e.data ? e.data.json() : { title: "EasyPDF", body: "You have an update." };
-  e.waitUntil(self.registration.showNotification(d.title, { body: d.body, icon: "icons/icon-192.png", badge: "icons/icon-96.png" }));
+/* Optional push/sync hooks. */
+self.addEventListener("push", event => {
+  const data = event.data ? event.data.json() :
+    { title: "EasyPDF", body: "You have an update." };
+  event.waitUntil(self.registration.showNotification(data.title, {
+    body: data.body, icon: "icons/icon-192.png", badge: "icons/icon-96.png"
+  }));
 });
-self.addEventListener("notificationclick", e => {
-  e.notification.close();
-  e.waitUntil(clients.openWindow("./"));
+self.addEventListener("notificationclick", event => {
+  event.notification.close();
+  event.waitUntil(clients.openWindow("./"));
 });
-self.addEventListener("sync", () => { /* background sync placeholder */ });
-self.addEventListener("periodicsync", e => {
-  if (e.tag === "refresh-shell") e.waitUntil(caches.open(CACHE).then(c => c.add("./index.html")));
+self.addEventListener("sync", () => {});
+self.addEventListener("periodicsync", event => {
+  if (event.tag === "refresh-shell") {
+    event.waitUntil(caches.open(CACHE).then(cache => cache.add("./index.html")));
+  }
 });

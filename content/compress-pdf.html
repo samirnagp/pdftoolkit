@@ -1,0 +1,87 @@
+<!-- ============================================================
+ EasyPDF – Compress PDF: unique content block
+ HOW TO USE: open compress-pdf/index.html, keep your existing tool (upload form + script),
+ and replace the sections after it ("How to use", "Why use EasyPDF", "Good to know",
+ "Questions") with everything between START and END below. Keep "More PDF tools".
+ Also paste the <head> items (title, description, JSON-LD) at the bottom of this file.
+============================================================ -->
+<!-- START -->
+<style>
+.cx{max-width:1080px;margin:0 auto;padding:0 20px;line-height:1.65}
+.cx h2{font-size:1.45rem;margin:34px 0 10px}.cx h3{margin:18px 0 4px}
+.cx .target{border:2px solid #d9480f;border-radius:14px;padding:20px;margin:28px 0;background:rgba(217,72,15,.06)}
+.cx .target h2{margin-top:0}
+.cx .sizes{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:14px 0}
+.cx .sizes a{display:block;text-align:center;padding:16px 10px;border-radius:12px;background:#d9480f;color:#fff;text-decoration:none;font-weight:700;font-size:1.1rem}
+.cx .sizes a small{display:block;font-weight:400;font-size:.8rem;opacity:.9}
+.cx .sizes a:hover{background:#b83a08}
+.cx table{border-collapse:collapse;width:100%;margin:10px 0}.cx th,.cx td{border:1px solid rgba(128,128,128,.35);padding:9px 12px;text-align:left;vertical-align:top}
+.cx details{border-bottom:1px solid rgba(128,128,128,.35);padding:12px 0}.cx summary{cursor:pointer;font-weight:600}
+.cx .note{font-size:.9rem;opacity:.8}
+</style>
+<div class="cx">
+
+<section class="target" aria-labelledby="exact">
+  <h2 id="exact">Need an exact size: 10 KB, 50 KB or 100 KB?</h2>
+  <p>Job portals, exam forms and government sites often reject a PDF above a fixed limit such as 10 KB, 50 KB or 100 KB. This page gives you quick general compression. When you need a PDF under a specific size, use our companion site, which is built for target-size compression.</p>
+  <div class="sizes">
+    <a href="https://www.easypdf.website" target="_blank" rel="noopener">Compress PDF to 10 KB<small>for tiny upload limits</small></a>
+    <a href="https://www.easypdf.website" target="_blank" rel="noopener">Compress PDF to 50 KB<small>for forms and applications</small></a>
+    <a href="https://www.easypdf.website" target="_blank" rel="noopener">Compress PDF to 100 KB<small>for documents and IDs</small></a>
+  </div>
+  <p class="note">Opens www.easypdf.website in a new tab. Very small targets lower image quality, so check the result before you submit.</p>
+</section>
+
+<h2>Which compression level should you choose?</h2>
+<table>
+  <tr><th>Level</th><th>Best for</th><th>What to expect</th></tr>
+  <tr><td>Smallest file</td><td>Email attachments, strict upload limits, reading on a screen</td><td>The biggest reduction. Photos and scans look softer.</td></tr>
+  <tr><td>Balanced</td><td>Everyday sharing and most uploads</td><td>A good mix of size and sharpness.</td></tr>
+  <tr><td>Best quality</td><td>Printing and archiving</td><td>A smaller reduction, with images kept sharper.</td></tr>
+</table>
+
+<h2>Why some PDFs shrink a lot and others barely change</h2>
+<p>A PDF is a container. Most of its weight usually comes from images: scanned pages, photos, logos and screenshots. A 6 MB scan of a few pages can often drop to a fraction of that size. A PDF that is mostly text is already small, so there is little to remove. If we cannot make a file smaller, you get your original back, so a compressed result is never bigger than what you uploaded.</p>
+
+<h2>How to get a PDF under a size limit</h2>
+<ol>
+  <li><b>Try Balanced first.</b> If the file is still too big, run it again on Smallest file.</li>
+  <li><b>Remove pages you don’t need.</b> Use <a href="/split-pdf/">Extract Pages</a> to keep only the pages the form asks for.</li>
+  <li><b>Rebuild from smaller images.</b> If your PDF comes from phone photos, make it again with <a href="/images-to-pdf/">Images to PDF</a> or <a href="/scan-to-pdf/">Scan to PDF</a> using lower-resolution pictures.</li>
+  <li><b>Split a very large file.</b> Files over 25 MB can be split, compressed in parts, then joined with <a href="/merge-pdf/">Merge PDF</a>.</li>
+  <li><b>For a strict 10, 50 or 100 KB limit,</b> use <a href="https://www.easypdf.website" target="_blank" rel="noopener">www.easypdf.website</a>.</li>
+</ol>
+
+<h2>Common uses</h2>
+<ul>
+  <li><b>Job and exam applications:</b> resumes, certificates and ID proofs with upload limits.</li>
+  <li><b>Email:</b> attachments that bounce because they are too large.</li>
+  <li><b>Messaging apps and shared drives:</b> quick sharing on a slow connection.</li>
+  <li><b>Storage:</b> shrinking a folder of old scans.</li>
+</ul>
+
+<h2>Privacy</h2>
+<p>This tool uses our server. Your PDF travels over an encrypted connection, is used only to make the compressed file, and is deleted right after the result is sent. See the <a href="/privacy.html">Privacy Policy</a>.</p>
+
+<h2>Compress PDF: frequently asked questions</h2>
+<details><summary>Can I compress a PDF to exactly 50 KB or 100 KB here?</summary><p>This page offers three general levels and cannot promise an exact size. For a target such as 10 KB, 50 KB or 100 KB, use <a href="https://www.easypdf.website" target="_blank" rel="noopener">www.easypdf.website</a>.</p></details>
+<details><summary>Will compressing change my text or layout?</summary><p>No. Compression mainly recompresses images, so text and layout stay the same. Images can look softer at the Smallest level.</p></details>
+<details><summary>Why is my compressed PDF almost the same size?</summary><p>If the file is mostly text, or was already compressed, there is little left to remove. You then receive your original file.</p></details>
+<details><summary>Is there a file size limit?</summary><p>Yes. This tool accepts files up to 25 MB. For larger files, split them first, then compress each part.</p></details>
+<details><summary>Is my file kept on your server?</summary><p>No. It is deleted right after the result is sent, and any leftover is removed within minutes.</p></details>
+<details><summary>Can I compress a scanned PDF?</summary><p>Yes. Scans are image-heavy, so they usually shrink the most. To also make the text searchable, run <a href="/ocr-pdf/">OCR PDF</a>.</p></details>
+</div>
+<!-- END -->
+
+<!-- ===== Paste into the <head> of compress-pdf/index.html (replace title and description) ===== -->
+<!--
+<title>Compress PDF Online Free – Reduce PDF Size up to 25 MB | EasyPDF</title>
+<meta name="description" content="Compress a PDF online for free. Choose Smallest, Balanced or Best quality, no sign-up. Need exactly 10 KB, 50 KB or 100 KB? Use our target-size tool.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Can I compress a PDF to exactly 50 KB or 100 KB here?","acceptedAnswer":{"@type":"Answer","text":"This page offers three general levels and cannot promise an exact size. For a target such as 10 KB, 50 KB or 100 KB, use www.easypdf.website."}},
+{"@type":"Question","name":"Will compressing change my text or layout?","acceptedAnswer":{"@type":"Answer","text":"No. Compression mainly recompresses images, so text and layout stay the same. Images can look softer at the Smallest level."}},
+{"@type":"Question","name":"Is there a file size limit?","acceptedAnswer":{"@type":"Answer","text":"Yes. This tool accepts files up to 25 MB. For larger files, split them first, then compress each part."}},
+{"@type":"Question","name":"Is my file kept on your server?","acceptedAnswer":{"@type":"Answer","text":"No. It is deleted right after the result is sent, and any leftover is removed within minutes."}}]}
+</script>
+-->

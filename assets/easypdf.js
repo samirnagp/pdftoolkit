@@ -47,7 +47,7 @@ unl: {
     rot: { ext: PDF, opts: [S('ang', null, 'Rotate by', [['90', '90° clockwise'], ['180', '180°'], ['270', '90° counter-clockwise']], '90')] },
     scan: { ext: ['jpg', 'jpeg', 'png', 'webp'], multi: 1, cam: 1, opts: [S('look', null, 'Look', [['doc', 'Document (clean, high contrast)'], ['photo', 'Photo (keep colours)']], 'doc'), S('psz', null, 'Page size', [['a4', 'A4 pages'], ['fit', 'Same size as the photo']], 'a4')] },
     p2x: { srv: 'pdf-to-excel', ext: PDF },
-    rep: { srv: 'repair', unavailable: 'Repair PDF is not confirmed in the supplied backend API contract. This tool is paused until POST /api/repair is documented and tested.', ext: PDF },
+    rep: { srv: 'repair', ext: PDF },
     edit: { ext: PDF, editor: 1 },
   };
   const T = (window.TOOLS_META || []).map(m => ({ ...m, ...B[m.id] }));

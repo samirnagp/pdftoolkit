@@ -24,9 +24,9 @@ This upgrade is on the isolated branch `easypdf-upgrade-2026-11`. It does not mo
 ## Frontend Render deployment
 
 1. In GitHub, review the branch and pull request before merging. Keep the production `main` branch untouched until the checks below pass.
-2. In Render, open the existing EasyPDF static-site service. Confirm its repository is `samirnagp/pdftoolkit`, branch is `main`, and publish directory is the repository root. The blueprint now intentionally has no build command.
+2. In Render, open the existing EasyPDF static-site service. Confirm its repository is `samirnagp/pdftoolkit`, branch is `main`, and publish directory is the repository root. The blueprint now uses the required no-op build command `true`; the static files are already checked in, so no generator should run.
 3. Merge the reviewed pull request to `main` only when ready. Render should then deploy the new commit automatically if auto-deploy is enabled. Otherwise use Manual Deploy and select the latest `main` commit.
-4. Do not run `tools/build_pages.py` during deploy. It regenerates pages and shared assets and can overwrite manually maintained content.
+4. Do not run `tools/build_pages.py` during deploy. Render's Blueprint spec requires a build command for non-Docker services, so the configured command is `true` (no-op). It regenerates pages and shared assets and can overwrite manually maintained content.
 5. After deploy, hard-refresh the site on Android Chrome and desktop. Test a private/incognito window too.
 
 ## Backend Render environment

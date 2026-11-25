@@ -4,7 +4,8 @@ services:
     runtime: static
     # This is a pre-generated static site. Do not run tools/build_pages.py during
     # deployment: it regenerates pages and can overwrite hand-maintained content.
-    # Omitting buildCommand lets Render publish the checked-in files as-is.
+    # Render requires a build command for non-Docker services; true is a no-op.
+    buildCommand: "true"
     staticPublishPath: .
     headers:
       - path: /*

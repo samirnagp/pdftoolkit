@@ -45,4 +45,16 @@ function banner(){
 var choice='';try{choice=localStorage.getItem(KEY)||''}catch(e){}
 if(choice==='yes')enableIntegrations();else if(!choice)banner();
 var cs=$('#cookie-settings');if(cs)cs.addEventListener('click',function(e){e.preventDefault();try{localStorage.removeItem(KEY)}catch(x){}banner()});
+
+ // Backend availability: hide server-only tools if the API cannot be reached.
+var serverToolPaths=['/pdf-to-word/','/word-to-pdf/','/pdf-to-jpg/','/excel-to-pdf/','/powerpoint-to-pdf/','/pdf-to-excel/','/compress-pdf/','/protect-pdf/','/unlock-pdf/','/ocr-pdf/','/repair-pdf/'];
+function hideServerTools(){
+  serverToolPaths.forEach(function(path){$$('a[href="'+path+'"]').forEach(function(a){a.hidden=true;});});
+  var grid=$('#grid');
+  if(grid){
+    var note=$('#backend-offline-note');
+    if(!note){note=document.createElement('p');note.id='backend-offline-note';note.className='small';note.setAttribute('role','status');note.textContent='Some conversion tools are temporarily unavailable while the conversion service is offline. The tools marked “On your device” remain available.';grid.parentNode.insertBefore(note,grid);}
+  }
+}
+fetch('https://api.easypdf.co.in/health',{method:'GET',cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('API unavailable');}).catch(hideServerTools);
 })();

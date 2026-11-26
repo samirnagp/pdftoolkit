@@ -1,5 +1,5 @@
 /* EasyPDF service worker: offline shell, share target, push/sync hooks */
-const CACHE = "easypdf-v7";
+const CACHE = "easypdf-v8";
 const SHARE = "pdfkit-share";
 const SHELL = [
   "./", "./index.html", "./offline.html", "./privacy.html", "./manifest.webmanifest", "./pwa.js", "./assets/easypdf.css", "./assets/easypdf.js", "./assets/config.js", "./assets/icons.js", "./assets/tools.js", "./assets/site-enhancements.js",
@@ -46,7 +46,15 @@ self.addEventListener("fetch", e => {
   if (r.method !== "GET") return;   // uploads to the backend API are never touched
   if (u.origin !== location.origin && u.hostname !== "cdnjs.cloudflare.com") return;
 
-  // Network first, cache fallback, offline page for navigations
+  // PDF.js and its worker must be a matching pair. Never serve either from an
+  // old service-worker cache; fetch the exact deployed asset instead.
+  if (u.origin === location.origin && u.pathname.startsWith("/assets/vendor/pdfjs/")) {
+    e.respondWith(fetch(r, { cache: "no-store" }));
+    return;
+  }
+
+  // Network first. Match the full request URL so versioned assets cannot be
+  // replaced by a stale response with a different query-string version.
   e.respondWith(
     fetch(r).then(res => {
       if (res.ok || res.type === "opaque") {
@@ -55,7 +63,7 @@ self.addEventListener("fetch", e => {
       }
       return res;
     }).catch(async () => {
-      const hit = await caches.match(r, { ignoreSearch: true });
+      const hit = await caches.match(r);
       if (hit) return hit;
       if (r.mode === "navigate") return (await caches.match("./index.html")) || caches.match("./offline.html");
       return Response.error();

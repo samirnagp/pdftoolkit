@@ -2,15 +2,30 @@ services:
   - type: web
     name: easypdf-frontend
     runtime: static
-    buildCommand: python3 build_pages.py
+    # This is a pre-generated static site. Do not run tools/build_pages.py during
+    # deployment: it regenerates pages and can overwrite hand-maintained content.
+    # Render requires a build command for non-Docker services; true is a no-op.
+    buildCommand: "true"
     staticPublishPath: .
     headers:
       - path: /*
         name: X-Content-Type-Options
         value: nosniff
       - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
         name: Referrer-Policy
         value: strict-origin-when-cross-origin
       - path: /*
         name: Permissions-Policy
         value: camera=(self), microphone=(), geolocation=()
+      - path: /*
+        name: Strict-Transport-Security
+        value: max-age=31536000; includeSubDomains
+      - path: /sw.js
+        name: Cache-Control
+        value: no-cache
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=3600

@@ -16,16 +16,49 @@ var none=$('#none');if(none)none.hidden=n>0}
 if(q){q.addEventListener('input',apply);
 q.addEventListener('keydown',function(e){if(e.key==='Enter'){var f=cards.filter(function(c){return !c.hidden})[0];if(f)location.href=f.href}})}
 $$('.chip').forEach(function(b){b.addEventListener('click',function(){cat=b.dataset.cat;$$('.chip').forEach(function(x){x.classList.toggle('on',x===b)});apply()})});
-// Cookie consent (analytics + ads load only after "Accept")
+// Cookie consent: analytics and advertising are initialized only after acceptance.
 var KEY='easypdf_consent';
-function load(){if(window.__adsLoaded)return;window.__adsLoaded=true;
-/* ADD AFTER CONSENT: paste your Google Analytics (gtag.js) and AdSense script loaders here. */}
-function banner(){if($('#cc'))return;var d=document.createElement('div');d.id='cc';d.setAttribute('role','dialog');d.setAttribute('aria-label','Cookie consent');
-d.innerHTML='<p>We use cookies for analytics and to show ads. You can accept or reject non-essential cookies. See our <a href="/privacy.html">Privacy Policy</a>.</p><button class="btn" id="cc-y">Accept</button> <button class="btn alt" id="cc-n">Reject</button>';
-document.body.appendChild(d);
-$('#cc-y').onclick=function(){try{localStorage.setItem(KEY,'yes')}catch(e){}d.remove();load()};
-$('#cc-n').onclick=function(){try{localStorage.setItem(KEY,'no')}catch(e){}d.remove()}}
-var s=null;try{s=localStorage.getItem(KEY)}catch(e){}
-if(s==='yes')load();else if(s!=='no')banner();
+function enableIntegrations(){
+  if(window.__easyConsentLoader)return;
+  window.__easyConsentLoader=true;
+  function start(){
+    var script=document.createElement('script');
+    script.src='/assets/site-enhancements.js?v=8';
+    script.onload=function(){window.dispatchEvent(new Event('easypdf-consent-accepted'))};
+    document.head.appendChild(script);
+  }
+  if(typeof API==='undefined' && !window.__easyConfigLoading){
+    window.__easyConfigLoading=true;
+    var cfg=document.createElement('script');cfg.src='/assets/config.js?v=8';
+    cfg.onload=start;document.head.appendChild(cfg);
+  }else start();
+}
+function banner(){
+  if($('#cc'))return;
+  var d=document.createElement('div');d.id='cc';d.setAttribute('role','dialog');d.setAttribute('aria-label','Cookie consent');
+  d.style.cssText='position:fixed;z-index:9999;left:12px;right:12px;bottom:12px;max-width:720px;margin:auto;padding:16px;background:#fff;color:#222;border:1px solid #bbb;border-radius:12px;box-shadow:0 4px 24px #0003;font:14px/1.5 system-ui,sans-serif';
+  d.innerHTML='<p>Optional analytics and advertising help support EasyPDF. Choose whether to allow them. Read our <a href="/privacy.html">Privacy Policy</a>.</p><button class="btn" id="cc-y" type="button">Accept</button> <button class="btn alt" id="cc-n" type="button">Reject</button>';
+  document.body.appendChild(d);
+  $('#cc-y').onclick=function(){try{localStorage.setItem(KEY,'yes')}catch(e){}d.remove();enableIntegrations()};
+  $('#cc-n').onclick=function(){try{localStorage.setItem(KEY,'no')}catch(e){}d.remove()};
+}
+var choice='';try{choice=localStorage.getItem(KEY)||''}catch(e){}
+if(choice==='yes')enableIntegrations();else if(!choice)banner();
 var cs=$('#cookie-settings');if(cs)cs.addEventListener('click',function(e){e.preventDefault();try{localStorage.removeItem(KEY)}catch(x){}banner()});
+
+ // Backend availability: hide server-only tools if the API cannot be reached.
+var serverToolPaths=['/pdf-to-word/','/word-to-pdf/','/pdf-to-jpg/','/excel-to-pdf/','/powerpoint-to-pdf/','/pdf-to-excel/','/compress-pdf/','/protect-pdf/','/unlock-pdf/','/ocr-pdf/','/repair-pdf/'];
+function hideServerTools(){
+  serverToolPaths.forEach(function(path){$$('a[href="'+path+'"]').forEach(function(a){a.hidden=true;});});
+  var grid=$('#grid');
+  if(grid){
+    var note=$('#backend-offline-note');
+    if(!note){note=document.createElement('p');note.id='backend-offline-note';note.className='small';note.setAttribute('role','status');note.textContent='Some conversion tools are temporarily unavailable while the conversion service is offline. The tools marked “On your device” remain available.';grid.parentNode.insertBefore(note,grid);}
+  }
+}
+var healthAbort=new AbortController(),healthTimer=setTimeout(function(){healthAbort.abort();},6000);
+fetch('https://api.easypdf.co.in/health',{method:'GET',cache:'no-store',signal:healthAbort.signal})
+  .then(function(r){if(!r.ok)throw new Error('API unavailable');})
+  .catch(hideServerTools)
+  .finally(function(){clearTimeout(healthTimer);});
 })();

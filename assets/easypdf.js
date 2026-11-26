@@ -47,7 +47,7 @@ unl: {
     rot: { ext: PDF, opts: [S('ang', null, 'Rotate by', [['90', '90° clockwise'], ['180', '180°'], ['270', '90° counter-clockwise']], '90')] },
     scan: { ext: ['jpg', 'jpeg', 'png', 'webp'], multi: 1, cam: 1, opts: [S('look', null, 'Look', [['doc', 'Document (clean, high contrast)'], ['photo', 'Photo (keep colours)']], 'doc'), S('psz', null, 'Page size', [['a4', 'A4 pages'], ['fit', 'Same size as the photo']], 'a4')] },
     p2x: { srv: 'pdf-to-excel', ext: PDF },
-    rep: { srv: 'repair', unavailable: 'Repair PDF is not confirmed in the supplied backend API contract. This tool is paused until POST /api/repair is documented and tested.', ext: PDF },
+    rep: { srv: 'repair', ext: PDF },
     edit: { ext: PDF, editor: 1 },
   };
   const T = (window.TOOLS_META || []).map(m => ({ ...m, ...B[m.id] }));
@@ -337,7 +337,18 @@ unl: {
     show('working'); $('cancel').hidden = false; setProg('Connecting to server…', null, '', true);
     const wake = setTimeout(() => { if (my === runId) setProg('Waking up the server…', null, 'This can take up to a minute the first time.', true); }, 6000);
     const ac = new AbortController(), wt = setTimeout(() => ac.abort(), 20000);
-    fetch(base + '/health', { cache: 'no-store', signal: ac.signal }).catch(() => { }).finally(() => { clearTimeout(wake); clearTimeout(wt); if (my === runId) send(); });
+    fetch(base + '/health', { cache: 'no-store', signal: ac.signal })
+      .then(r => {
+        clearTimeout(wake); clearTimeout(wt);
+        if (my !== runId) return;
+        if (!r.ok) throw new Error('health');
+        send();
+      })
+      .catch(() => {
+        clearTimeout(wake); clearTimeout(wt);
+        if (my !== runId) return;
+        fail({ title: 'Conversion service is unavailable', msg: 'The server did not respond. Your file was not uploaded.', hint: 'Please try again later, or use one of the tools marked “On your device”.', mode: 'none' });
+      });
     function send() {
       const x = new XMLHttpRequest(); xhr = x;
       x.open('POST', base + '/api/' + t.srv); x.responseType = 'blob'; if (KEY) x.setRequestHeader('X-API-Key', KEY);

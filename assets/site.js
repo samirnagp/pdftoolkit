@@ -56,5 +56,9 @@ function hideServerTools(){
     if(!note){note=document.createElement('p');note.id='backend-offline-note';note.className='small';note.setAttribute('role','status');note.textContent='Some conversion tools are temporarily unavailable while the conversion service is offline. The tools marked “On your device” remain available.';grid.parentNode.insertBefore(note,grid);}
   }
 }
-fetch('https://api.easypdf.co.in/health',{method:'GET',cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('API unavailable');}).catch(hideServerTools);
+var healthAbort=new AbortController(),healthTimer=setTimeout(function(){healthAbort.abort();},6000);
+fetch('https://api.easypdf.co.in/health',{method:'GET',cache:'no-store',signal:healthAbort.signal})
+  .then(function(r){if(!r.ok)throw new Error('API unavailable');})
+  .catch(hideServerTools)
+  .finally(function(){clearTimeout(healthTimer);});
 })();

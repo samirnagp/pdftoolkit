@@ -337,7 +337,18 @@ unl: {
     show('working'); $('cancel').hidden = false; setProg('Connecting to server…', null, '', true);
     const wake = setTimeout(() => { if (my === runId) setProg('Waking up the server…', null, 'This can take up to a minute the first time.', true); }, 6000);
     const ac = new AbortController(), wt = setTimeout(() => ac.abort(), 20000);
-    fetch(base + '/health', { cache: 'no-store', signal: ac.signal }).catch(() => { }).finally(() => { clearTimeout(wake); clearTimeout(wt); if (my === runId) send(); });
+    fetch(base + '/health', { cache: 'no-store', signal: ac.signal })
+      .then(r => {
+        clearTimeout(wake); clearTimeout(wt);
+        if (my !== runId) return;
+        if (!r.ok) throw new Error('health');
+        send();
+      })
+      .catch(() => {
+        clearTimeout(wake); clearTimeout(wt);
+        if (my !== runId) return;
+        fail({ title: 'Conversion service is unavailable', msg: 'The server did not respond. Your file was not uploaded.', hint: 'Please try again later, or use one of the tools marked “On your device”.', mode: 'none' });
+      });
     function send() {
       const x = new XMLHttpRequest(); xhr = x;
       x.open('POST', base + '/api/' + t.srv); x.responseType = 'blob'; if (KEY) x.setRequestHeader('X-API-Key', KEY);
